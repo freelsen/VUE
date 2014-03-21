@@ -82,6 +82,13 @@ public class MapMouseEvent extends MouseEvent
         this.mapX = getViewer().screenToMapX(e.getX());
         this.mapY = getViewer().screenToMapY(e.getY());
     }
+  //+ls;140321;
+    public MapMouseEvent(MouseWheelEvent e)
+    {
+        this(e, 0f, 0f, null, false);
+        this.mapX = getViewer().screenToMapX(e.getX());
+        this.mapY = getViewer().screenToMapY(e.getY());
+    }
     
     public MapMouseEvent(MouseEvent e, LWComponent c)
     {

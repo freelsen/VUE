@@ -15,6 +15,8 @@
 
 package tufts.vue;
 
+import tufts.vue.LWComponent.Alignment;
+import tufts.vue.LWNode;
 import tufts.vue.gui.*;
 import tufts.vue.gui.formattingpalette.AlignmentDropDown;
 import java.awt.*;
@@ -54,6 +56,9 @@ public class FontEditorPanel extends JPanel
                //implements LWEditor
 //    implements ActionListener, VueConstants//, PropertyChangeListener//implements PropertyChangeListener
 {
+	//+ls;140316;
+	LWNode lsnode = null;
+
     private boolean DEBUG_FONTPANEL=false;
     private static String[] sFontSizes;
     
@@ -212,6 +217,13 @@ public class FontEditorPanel extends JPanel
 
       			public void actionPerformed(ActionEvent e) {
 
+      			//+ls;140316;
+       				if( lsnode != null )
+       				{
+       					lsnode.mAlignment.set( Alignment.RIGHT );
+       					return;
+       				}
+       				
     				if (suspendItemListeners) return;
     				if (EditorManager.isEditorLoading()) return;
 
@@ -224,7 +236,17 @@ public class FontEditorPanel extends JPanel
 
            			public void actionPerformed(ActionEvent e) {
 
+           				//+ls;140316;
+           				if( lsnode != null )
+           				{
+           					lsnode.mAlignment.set( Alignment.LEFT );
+           					return;
+           				}
+           				
         				if (suspendItemListeners) return;
+        				
+        				
+        				
         				if (EditorManager.isEditorLoading()) return;
 
         				paraAlignLeftAction.actionPerformed(e);
@@ -235,6 +257,13 @@ public class FontEditorPanel extends JPanel
              paraAlignCenterActionWrapper = new ActionListener(){
 
             	 public void actionPerformed(ActionEvent e) {
+            		 
+            		//+ls;140316;
+    				if( lsnode != null )
+    				{
+    					lsnode.mAlignment.set( Alignment.CENTER );
+    					return;
+    				}
 
      				if (suspendItemListeners) return;
     				if (EditorManager.isEditorLoading()) return;
@@ -1355,6 +1384,16 @@ public class FontEditorPanel extends JPanel
         establishDefaultListeners();
 
     }
+    //+ls;140316;
+    private void ls_breakdownLWNodeListener()
+    {
+    	lsnode = null;
+    	mLeftAlignButton.setEnabled(false);
+      	mCenterAlignButton.setEnabled(false);
+      	mRightAlignButton.setEnabled(false);
+      	
+      	 establishDefaultListeners();
+    }
     
     private void breakdownRichTextListeners()
     {
@@ -1431,6 +1470,20 @@ public class FontEditorPanel extends JPanel
         
         enableSupportedEditors();
         RTBListenersAdded = true;
+    }
+    //+ls; 140316;
+    private void ls_establishNodeListeners(LWNode c )
+    {
+    	lsnode = c;
+    	
+    	mLeftAlignButton.setEnabled(true);
+    	mCenterAlignButton.setEnabled(true);
+    	mRightAlignButton.setEnabled(true);
+    
+        mLeftAlignButton.addActionListener(paraAlignLeftActionWrapper);
+        mCenterAlignButton.addActionListener(paraAlignCenterActionWrapper);
+        mRightAlignButton.addActionListener(paraAlignRightActionWrapper);
+        
     }
     
     public void establishDefaultListeners()
@@ -1517,6 +1570,14 @@ public class FontEditorPanel extends JPanel
     		if (LWTextListenersAdded)
     			breakdownLWTextListeners();            
     	}
+    	//+ls;140316;
+    	else if( e.oldActive instanceof LWNode)
+    	{
+    		//lsnode = null;
+    		this.ls_breakdownLWNodeListener();
+    		//if (LWTextListenersAdded)
+    		//	breakdownLWTextListeners(); 
+    	}
     	
     	if (e.active != null && e.oldActive != null && e.active instanceof LWText && e.oldActive instanceof LWText)
     	{
@@ -1528,6 +1589,7 @@ public class FontEditorPanel extends JPanel
     		suspendItemListeners=false;
     		return;
     	}
+    	
     	if (e.active instanceof LWText)
     	{    
     		
@@ -1541,11 +1603,20 @@ public class FontEditorPanel extends JPanel
     		((LWText)e.active).richLabelBox.setCaretPosition(2);
     		updateFormatControlsTB(((LWText)e.active).richLabelBox);
     		
-    	}    	
+    	} 
     	else
     	{
     		if (!defaultListenersAdded)
     			establishDefaultListeners();
+    	}
+    	
+    	//+ls; 140316;
+    	if( e.active instanceof LWNode)
+    	{
+    		if (!LWTextListenersAdded)
+    		{    		
+    			this.ls_establishNodeListeners((LWNode)activeText);
+    	 	}
     	}
     	suspendItemListeners=false;
     }

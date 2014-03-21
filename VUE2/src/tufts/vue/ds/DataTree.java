@@ -2290,14 +2290,14 @@ public class DataTree extends javax.swing.JTree
     private static final Icon UniqueValueOnMapIcon = makeIcon(0x229A, 16, VueConstants.COLOR_SELECTION, 0, 0);
     private static final Icon UniqueValueOffMapIcon = makeIcon(0x229A, 16, Color.lightGray, 0, 0);
     
-    // 29BE: â¦¾
-    // 29BF: â¦¿
-    // 25C9: â—‰ 
-    // 25CE: â—Ž
-    // 229A: âŠš
-    // 25E6: â—¦
-    // 229D: âŠ�
-    // 229B: âŠ›    
+    // 29BE
+    // 29BF
+    // 25C9
+    // 25CE
+    // 229A
+    // 25E6
+    // 229D
+    // 229B   
 
 
     

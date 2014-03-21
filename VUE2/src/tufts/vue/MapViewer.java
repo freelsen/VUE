@@ -21,6 +21,8 @@ import static tufts.Util.*;
 
 import tufts.vue.LinkTool.ComboModeTool;
 import tufts.vue.NodeTool.NodeModeTool;
+import tufts.vue.VueTool;
+import tufts.vue.VueToolbarController;
 import tufts.vue.gui.GUI;
 import tufts.vue.gui.DockWindow;
 import tufts.vue.gui.FocusManager;
@@ -6048,6 +6050,9 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
         private static DockWindow DebugIntrospector;
         private DockWindow debugPanner;
 
+        //+ls;140318;
+        private boolean lskeydown = false;
+        
     public void keyPressed(KeyEvent e) {
 
         mKeyIsPressing = true;
@@ -6069,8 +6074,39 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
             final int keyCode = e.getKeyCode();
             final char keyChar = e.getKeyChar();
             boolean handled = true;
+            
+            //+ls;140318;
+            VueTool vt = null;
+            VueTool[] vts = VueToolbarController.getController().getTopLevelTools();
+            int idx=0;
+            if( keyCode == KeyEvent.VK_CONTROL )
+            	lskeydown = true;
 
             switch (keyCode) {
+          //+ls; 140321; add new shortcut keys;
+            case KeyEvent.VK_1:
+            	idx = 0; 	vt = vts[idx]; vt.actionPerformed(null);
+            	break;
+            case KeyEvent.VK_2:
+            	idx = 1;	vt = vts[idx]; vt.actionPerformed(null);
+            	break;
+            case KeyEvent.VK_3:
+            	idx = 2;	vt = vts[idx]; vt.actionPerformed(null);
+            	break;
+            case KeyEvent.VK_4:
+            	idx = 3;	vt = vts[idx]; vt.actionPerformed(null);
+            	break;
+            case KeyEvent.VK_5:
+            	idx = 4;	vt = vts[idx]; vt.actionPerformed(null);
+            	break;
+            case KeyEvent.VK_6:
+            	idx = 5;	vt = vts[idx]; vt.actionPerformed(null);
+            	break;
+            case KeyEvent.VK_7:
+            case KeyEvent.VK_Q:
+            	idx = 6;	vt = vts[idx]; vt.actionPerformed(null);
+            	break;
+            
             case KeyEvent.VK_DELETE:
             case KeyEvent.VK_BACK_SPACE:
                 // todo: can't we add this to a keymap for the MapViewer JComponent?
@@ -6438,6 +6474,12 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
         
     public void keyReleased(KeyEvent e) {
         if (DEBUG.KEYS) kdebug("keyReleased", e);
+        
+        //+ls;140318; for node drag when node overlapped;
+        final int keyCode = e.getKeyCode();       
+       if( keyCode == KeyEvent.VK_CONTROL )
+        	lskeydown = false;
+              
         try {
             handleKeyReleased(e);
         } catch (Throwable t) {
@@ -7067,6 +7109,23 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
                 if (DEBUG.MOUSE) System.out.println("ignoring speedy wheel event");
                 return; } */
 
+          //+ls;140321;
+            //System.out.println("--- mouse wheel.");
+            if( (e.isControlDown()))
+            {
+            	MapMouseEvent mme = new MapMouseEvent(e);
+                
+                
+            	VueTool[] vts = VueToolbarController.getController().getTopLevelTools();
+                ZoomTool zmtl = (ZoomTool)vts[5];
+                
+                zmtl.lsSetMapxy(mme.getMapX(), mme.getMapY());
+                zmtl.lsHandleMouseWheel(e);
+                e.consume(); 
+                
+                return;
+            }
+            
             //if (inScrollPane && !(e.isMetaDown() || e.isAltDown())) { // too easy to accidentally zoom during presentation
             if (inScrollPane && !(e.isMetaDown() || e.isAltDown())) {
                 // Do not consume, and let the event be passed on to
@@ -7640,62 +7699,66 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
                      ) {
 
 
-                // TODO: above VueSelection should never be null.
-                
-                //-------------------------------------------------------
-                // vanilla drag -- check for node drop onto another node
-                //-------------------------------------------------------
-
-                // TODO: this code needs major cleanup, and needs to be made
-                // container general instead of node specific.
-                
-                LWComponent over = null;
-                /*
-                LWComponent dragLWC = null;
-                if (dragComponent instanceof LWGroup) {
-                    // dragComponent is (always?)) a LWGroup these days...
-                    LWGroup group = (LWGroup) dragComponent;
-                    if (group.getChildList().size() == 1)
-                        dragLWC = (LWComponent) group.getChildList().get(0);
-                }
-                if (dragLWC == null)
-                    over = getMap().findLWNodeAt(mapX, mapY);
-                else
-                    over = getMap().findDeepestChildAt(mapX, mapY, dragLWC);
-                */
-                // is ignoreSelected good enough because possible children of
-                // a dragged object are not selected?
-                //over = pickDropTarget(mapX, mapY, true);
-
-                PickContext pc = getPickContext(mapX, mapY);
-                pc.ignoreSelected = true;
-
-                // TODO: stop using group if just one item in selection, use
-                // real component, and just go ahead and have different code
-                // for handling resize of single objects and of selections
-                if (VueSelection.size() == 1)
-                    pc.dropping = VueSelection.first();
-                else
-                    pc.dropping = dragComponent;
-
-                over = LWTraversal.PointPick.pick(pc);
-                
-                
-                if (indication != null && indication != over) {
-                    //repaintRegion.add(indication.getBounds());
-                    clearIndicated();
-                }
-                if (over != null && isDropRequest(e)) { 
-                    if (isValidParentTarget(VueSelection, over)) {
-                        setIndicated(over);
-                    } else if (over instanceof LWSlide == false && isValidParentTarget(VueSelection, over.getParent())) {
-                        // if we're here and over is a slide, it must have been a map slide, which we don't want to drop
-                        // on for now...
-                        setIndicated(over.getParent());
-                    }
-                    //repaintRegion.add(over.getBounds());
-                } else
-                    clearIndicated();
+//            	//+ls;140318;
+            	if( lskeydown )
+            	{
+	                // TODO: above VueSelection should never be null.
+	                
+	                //-------------------------------------------------------
+	                // vanilla drag -- check for node drop onto another node
+	                //-------------------------------------------------------
+	
+	                // TODO: this code needs major cleanup, and needs to be made
+	                // container general instead of node specific.
+	                
+	                LWComponent over = null;
+	                /*
+	                LWComponent dragLWC = null;
+	                if (dragComponent instanceof LWGroup) {
+	                    // dragComponent is (always?)) a LWGroup these days...
+	                    LWGroup group = (LWGroup) dragComponent;
+	                    if (group.getChildList().size() == 1)
+	                        dragLWC = (LWComponent) group.getChildList().get(0);
+	                }
+	                if (dragLWC == null)
+	                    over = getMap().findLWNodeAt(mapX, mapY);
+	                else
+	                    over = getMap().findDeepestChildAt(mapX, mapY, dragLWC);
+	                */
+	                // is ignoreSelected good enough because possible children of
+	                // a dragged object are not selected?
+	                //over = pickDropTarget(mapX, mapY, true);
+	
+	                PickContext pc = getPickContext(mapX, mapY);
+	                pc.ignoreSelected = true;
+	
+	                // TODO: stop using group if just one item in selection, use
+	                // real component, and just go ahead and have different code
+	                // for handling resize of single objects and of selections
+	                if (VueSelection.size() == 1)
+	                    pc.dropping = VueSelection.first();
+	                else
+	                    pc.dropping = dragComponent;
+	
+	                over = LWTraversal.PointPick.pick(pc);
+	                
+	                
+	                if (indication != null && indication != over) {
+	                    //repaintRegion.add(indication.getBounds());
+	                    clearIndicated();
+	                }
+	                if (over != null && isDropRequest(e)) { 
+	                    if (isValidParentTarget(VueSelection, over)) {
+	                        setIndicated(over);
+	                    } else if (over instanceof LWSlide == false && isValidParentTarget(VueSelection, over.getParent())) {
+	                        // if we're here and over is a slide, it must have been a map slide, which we don't want to drop
+	                        // on for now...
+	                        setIndicated(over.getParent());
+	                    }
+	                    //repaintRegion.add(over.getBounds());
+	                } else
+	                    clearIndicated();
+            	}
             }
             
             if (dragComponent == null && dragControl == null)

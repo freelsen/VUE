@@ -187,6 +187,8 @@
 		<field name="XMLtextBox">       <bind-xml name="textBox" node="element"/></field>
                 <field name="strokeWidth">      <bind-xml name="strokeWidth" node="attribute"/></field>
 		<field name="XMLstrokeStyle">   <bind-xml name="strokeStyle" node="attribute"/></field>
+		<!-- +ls;140315-0217; -->
+		<field name ="XMLalignment"> 		<bind-xml name="alignment" node="attribute"/></field>
                 
 		<field name="autoSized" type="boolean"><bind-xml name="autoSized" node="attribute"/></field>
                 

@@ -1325,6 +1325,7 @@ public class LWComponent
     public final ColorProperty mStrokeColor = new ColorProperty(KEY_StrokeColor, java.awt.Color.darkGray);
     public final FloatProperty mStrokeWidth = new FloatProperty(KEY_StrokeWidth) { void onChange() { rebuildStroke(); }};
     public final EnumProperty<Alignment> mAlignment = new EnumProperty(KEY_Alignment, Alignment.LEFT) {
+    //public final EnumProperty<Alignment> mAlignment = new EnumProperty(KEY_Alignment, Alignment.CENTER) {
             void onChange() { layout(KEY_Alignment); }
         };
 
@@ -3309,6 +3310,20 @@ public class LWComponent
             }
         }
     }
+  //+ls;140315;
+    public Integer getXMLalignment() {
+    	int code = mAlignment.get().ordinal();
+    	return code;// == 0 ? null : code;
+    }
+    public void setXMLalignment(Integer ordinal) {
+    	for( Alignment a : Alignment.values()) {
+    		if( a.ordinal() == ordinal ) {
+    			mAlignment.set(a);
+    			break;
+    		}
+    	}
+    }
+
 
     public Color        getFillColor()                  { return mFillColor.get(); }
     public void         setFillColor(Color c)           { mFillColor.set(c); }

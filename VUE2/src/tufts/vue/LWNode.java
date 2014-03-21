@@ -136,6 +136,10 @@ public class LWNode extends LWContainer
 
     private void initNode() {
         enableProperty(KEY_Alignment);
+        //+ls;140316;
+        //Alignment a = this.mAlignment.get();
+        //this.mAlignment.set(Alignment.CENTER);
+        //this.mAlignment = Alignment.CENTER;
     }
     
     LWNode(String label, float x, float y, RectangularShape shape)
@@ -2625,6 +2629,10 @@ public class LWNode extends LWContainer
             if (WrapText) {
                 return mLabelPos.x;
             } else {
+            	//+ls;140316;
+            	if( mAlignment.get() == Alignment.RIGHT )
+            		return ChildPadX;
+            	
                 // todo problem: pre-existing default alignment w/out icons
                 // is center label, left children: when we move to generally
                 // suporting left/center/right alignment, that configuration won't
@@ -2665,6 +2673,10 @@ public class LWNode extends LWContainer
             // but only to a certian threshold -- what a hack!
             //float textHeight = getLabelBox().getPreferredSize().height;
             
+        	//+ls;140316;
+        	if( mAlignment.get() == Alignment.RIGHT )
+        		return EdgePadY;
+        	
             if (false && WrapText)
                 return mLabelPos.y;
             else {
