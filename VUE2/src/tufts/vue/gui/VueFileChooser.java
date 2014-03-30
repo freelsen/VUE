@@ -39,6 +39,7 @@ import javax.swing.plaf.basic.BasicFileChooserUI;
 
 import tufts.Util;
 import tufts.vue.VueUtil;
+import tufts.vue.VUE;
 
 import edu.tufts.vue.preferences.PreferencesManager;
 
@@ -76,7 +77,13 @@ public class VueFileChooser extends JFileChooser{
     	 // up with a test case to see if this will really go.
     	 // MK
 		 // try{
-    		chooser = new VueFileChooser();
+			// +ls;-140330;
+			String s = VUE.getActiveMap().getSaveLocation();
+			//System.out.println(s);
+			if( s == null)
+				chooser = new VueFileChooser();
+			else
+				chooser = new VueFileChooser(new File(VUE.getActiveMap().getSaveLocation()));
 		 // } catch(Throwable t)
 		 // {
 		 //	  chooser.setUI(new javax.swing.plaf.metal.MetalFileChooserUI(chooser));
@@ -98,7 +105,15 @@ public class VueFileChooser extends JFileChooser{
     			chooser = new VueFileChooser(new File(VueUtil.getCurrentDirectoryPath()));
     		}
     		else
-    			chooser = new VueFileChooser();
+    		{
+    			//+ls;140330;
+    			String s = VUE.getActiveMap().getSaveLocation();
+    			//System.out.println(s);
+    			if( s == null)
+    				chooser = new VueFileChooser();
+    			else
+    				chooser = new VueFileChooser(new File(VUE.getActiveMap().getSaveLocation()));
+    		}
 
     	}
 		return chooser;
