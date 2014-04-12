@@ -89,7 +89,7 @@ public class Util
 
     private static boolean DEBUG = false;
 
-    private static String PlatformEncoding;
+    private static String PlatformEncoding="UTF-8";//+ls;140412;
     private static boolean JVM_is_64_bit;
     
     static {

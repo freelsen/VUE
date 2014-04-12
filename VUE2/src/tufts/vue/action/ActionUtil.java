@@ -82,8 +82,8 @@ public class ActionUtil
     private final static URL XML_MAPPING_OLD_RESOURCES =VueResources.getURL("mapping.lw.version_resource_fix");
 
     private final static String VUE_COMMENT_START = "<!-- Do Not Remove:";
-    private final static String OUTPUT_ENCODING = "US-ASCII";
-    private final static String DEFAULT_WINDOWS_ENCODING = "windows-1252"; // (a.k.a Cp1252) for reading pre ASCII enforced save files from Windows
+    private final static String OUTPUT_ENCODING = "UTF-8";//+ls-140412;"US-ASCII";
+    private final static String DEFAULT_WINDOWS_ENCODING = "UTF-8";//+ls;140412;"windows-1252"; // (a.k.a Cp1252) for reading pre ASCII enforced save files from Windows
     private final static String DEFAULT_MAC_ENCODING = "UTF-8"; // "MacRoman" not supported on Windows platform
 
 
@@ -1151,6 +1151,7 @@ public class ActionUtil
         if (mapping == null)
             mapping = getDefaultMapping();        
 
+        guessedEncoding = null;
         final String encoding = guessedEncoding == null ? DEFAULT_INPUT_ENCODING : guessedEncoding;
 
         return unmarshallMap(url, mapping, encoding, oldFormat, savingVersion, handler);
