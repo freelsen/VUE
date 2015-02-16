@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="task_compile">
+
+<!-- ==================== compile Task ================================ -->
+  <target name="compile-linux" depends="compile,prepare,version">
+
+    <!--
+    
+   <javac srcdir="${linux.src}"
+   	  destdir="${linux.class}"
+   	  debug="${compile.debug}"
+   	  deprecation="${compile.deprecation}"
+   	  optimize="${compile.optimize}"
+   	  listfiles="no"
+   	  classpath="${lib.home}/VUE-MacOSX.jar:${lib.home}/log4j-1.2.12.jar:${build.class}"
+   	  source="${target.version}"
+   	  target="${target.version}"
+   	  verbose="true"
+   	  >
+   	  <include name="tufts/vue/gui/*.java"/>
+    </javac>
+
+   -->
+    
+  </target>
+  <target name="compile" depends="prepare,version"
+    description="Compile Java sources using default javac">
+    <!-- echo message="lib.home is ${lib.home}"/ -->
+
+   
+
+<!-- +ls@140623; -->
+    <javac srcdir="${src}"
+           destdir="${build.class}"
+             debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           listfiles="yes"
+           source="${target.version}"
+           target="${target.version}"
+           encoding="utf-8"
+           >
+      <classpath refid="compile.classpath.oki1and2"/>
+      <include name="tufts/vue/OsidAsset*.java"/>
+      <exclude name="**/tmp/**"/>
+      <exclude name="**/bak/**"/>
+      <exclude name="**/old/**"/>
+    </javac>
+    
+    <javac srcdir="${src}" 
+           destdir="${build.class}"
+              debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           source="${target.version}"
+           target="${target.version}"
+           >
+      <classpath refid="compile.classpath.google"/>
+      <include name="tufts/google/*.java"/>
+      <exclude name="**/tmp/**"/>
+      <exclude name="**/bak/**"/>
+      <exclude name="**/old/**"/>
+    </javac>
+
+    <javac srcdir="${src}" 
+           destdir="${build.class}"
+             debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           listfiles="yes"
+           source="${target.version}"
+           target="${target.version}"
+           >
+      <classpath refid="compile.classpath.oki"/>
+      <include name="tufts/oki/**/*.java"/>
+    </javac>
+
+    <javac srcdir="${src}" 
+           destdir="${build.class}"
+             debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           listfiles="yes"
+           source="${target.version}"
+           target="${target.version}"
+           >
+      <classpath refid="compile.classpath.oki2"/>
+      <include name="tufts/oki/repository/fedora/*.java"/>
+      <include name="tufts/osid/types/*.java"/>
+      <exclude name="**/tmp/**"/>
+      <exclude name="**/bak/**"/>
+      <exclude name="**/old/**"/>
+    </javac>
+
+    <javac srcdir="${src}" 
+           destdir="${build.class}"
+             debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           listfiles="yes"
+           source="${target.version}"
+           target="${target.version}"
+           >
+      <classpath refid="compile.classpath.vue"/>
+      <include name="tufts/artifact/*.java"/>
+      <include name="tufts/googleapi/*.java"/>
+      <include name="tufts/vue/**/*.java"/>
+      <exclude name="tufts/vue/OsidAsset*.java"/>
+      <exclude name="**/macosx/**"/>
+      <exclude name="**/tmp/**"/>
+      <exclude name="**/bak/**"/>
+      <exclude name="**/old/**"/>
+    </javac>
+
+    <javac srcdir="${src}" 
+           destdir="${build.class}"
+             debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           listfiles="yes"
+           source="${target.version}"
+           target="${target.version}"
+           >
+      <classpath refid="compile.classpath.vue"/>
+      <include name="edu/**/*.java"/>
+      <include name="org/**/*.java"/>
+      <exclude name="**/macosx/**"/>
+      <exclude name="**/tmp/**"/>
+      <exclude name="**/bak/**"/>
+      <exclude name="**/old/**"/>
+    </javac>
+     <javac srcdir="${src}"
+           destdir="${build.class}"
+             debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           listfiles="no"
+           classpath="${lib.home}/VUE-MacOSX.jar:${lib.home}/log4j-1.2.12.jar"
+           source="${target.version}"
+           target="${target.version}"
+           verbose="false"
+           >
+      <!--classpath refid="compile.cfedoraasspath.vue"/-->
+      <include name="tufts/*.java"/>
+      <include name="test/**/*.java"/>
+      <exclude name="**/tmp/**"/>
+      <exclude name="**/bak/**"/>
+      <exclude name="**/old/**"/>
+    </javac>
+
+  </target>
+
+  
+  <!-- Create a classpath based on all the 3rd party jarfiles -->
+  <path id="thirdparty.jarfiles.classpath">
+    <filelist dir="${lib.home}" files="${thirdparty.jarfiles.names}"/>
+    <filelist dir="${lib.home}" files="${thirdparty.jarfiles.names.extendedFeatures}"/>
+  </path>
+    
+</project>    

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="jar">
+<!-- ==================== Vue JAR files ================================ -->
+  <target name="jar-types"  
+          depends="compile"
+          description="Create OSID Types jar">
+
+    <mkdir dir="dist/lib/osid"/>    
+    <delete file="dist/lib/osid/TuftsOSIDTypes.jar"/>
+    <jar zipfile="dist/lib/osid/TuftsOSIDTypes.jar" update="true" compress="false" index="true">
+      <fileset dir="${build.class}" includes="tufts/osid/types/**"/>
+    </jar>
+  </target>
+
+<!-- ==================== Vue JAR files ================================ -->
+  <target name="jar-repository"  
+          depends="compile"
+          description="Create TuftsDigitalLibraryOSID.jar containing all supporting files">
+
+    <mkdir dir="dist/lib/osid"/>    
+    <delete file="dist/lib/osid/TuftsDigitalLibraryOSID.jar"/>
+    <jar zipfile="dist/lib/osid/TuftsDigitalLibraryOSID.jar" update="true" compress="false" index="true">
+      <fileset dir="${src}" includes="vue.conf"/>
+      <fileset dir="${src}" includes="tufts/vue/VueResources.properties"/>
+      <fileset dir="${src}" includes="tufts/oki/repository/fedora/RepositoryManager.properties"/>
+      <fileset dir="${src}" includes="tufts/oki/repository/fedora/fedora.conf"/>
+      <fileset dir="${build.class}" includes="tufts/oki/repository/**"/>
+      <fileset dir="${build.class}" includes="tufts/oki/id/**"/>
+      <fileset dir="${build.class}" includes="tufts/oki/shared2/**"/>
+    </jar>
+    <copy file="${lib.home}/fedora-server.jar" todir="dist/lib/osid" verbose="true"/>
+  </target>
+    
+    </project>

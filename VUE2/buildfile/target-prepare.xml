@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="target_prepare">
+
+<!-- ==================== Prepare Target ================================== -->
+<!--
+  The "prepare" target is used to create the "build" destination directory,
+  and copy the static contents of your web application to it.  If you need
+  to copy static files from external dependencies, you can customize the
+  contents of this task.
+
+  Normally, this task is executed indirectly when needed.
+-->
+
+  <target name="prepare">
+  
+    <!-- +ls@140623; -->
+    <copy file="${src}/edu/tufts/osidimpl/repository/artifact/artifact.xml" todir="${build.class}/edu/tufts/osidimpl/repository/artifact" verbose="true"/>
+    <copy file="${src}/edu/tufts/osidimpl/repository/artifact/artifact_result.xml" todir="${build.class}/edu/tufts/osidimpl/repository/artifact" verbose="true"/>
+    <copy file="${src}/edu/tufts/osidimpl/repository/artifact/artifact_result_title.xml" todir="${build.class}/edu/tufts/osidimpl/repository/artifact" verbose="true"/>
+    <copy file="${src}/edu/tufts/osidimpl/repository/artifact/artifact_result_artist.htm" todir="${build.class}/edu/tufts/osidimpl/repository/artifact" verbose="true"/>
+
+  	<copy file="${src}/edu/tufts/seasr/seasr.xml" todir="${build.class}/edu/tufts/seasr" verbose="true"/>
+  	<copy file="${src}/edu/tufts/seasr/seasr_mapping.xml" todir="${build.class}/edu/tufts/seasr" verbose="true"/>
+    <!-- Determine if Java 1.4 is available on this machine -->
+    <condition property="java1.4.present"> 
+      <equals arg1="${ant.java.version}" arg2="1.4" /> 
+    </condition>
+    
+    <!-- Set Ant batch file based on test for platform -->
+    <condition property="ant.exec" value="ant.bat"> 
+      <os family="windows"/>
+    </condition>
+    <condition property="ant.exec" value="ant"> 
+      <not>
+        <os family="windows"/>
+      </not>
+    </condition>
+    <mkdir dir="${build.class}"/>
+    <mkdir dir="${linux.class}"/>
+    <tstamp />
+  </target>
+
+</project>

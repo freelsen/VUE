@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="task_other">
+    
+    <!-- ==================== Debugging tasks  ================================ -->
+    <target name="info" description="Display Library and Classpath Variables">
+      <pathconvert pathsep="${line.separator}lib: " property="dist.jarfiles" refid="thirdparty.jarfiles.classpath"/>
+      <pathconvert pathsep="  " property="info.classpath" refid="runtime.classpath"/>
+      <pathconvert pathsep="  " property="info.compilepath.common" refid="compile.classpath.common"/>
+      <pathconvert pathsep="  " property="info.compilepath.vue" refid="compile.classpath.vue"/>
+      <echo message="DISTRIBUTION JAR FILES:${line.separator}${dist.jarfiles}"/>
+      <echo message="RUNTIME CLASSPATH:         ${info.classpath}"/>
+      <echo message="COMMON COMPILE CLASSPATH:  ${info.compilepath.common}"/>
+      <echo message="TUFTS/VUE COMPILE CLASSPATH: ${info.compilepath.vue}"/>
+      <echo message="ant.java.version: ${ant.java.version}"/>
+    </target>
+
+    <target name="info-jarlib">
+      <echo message="Jar Library Extensions Info (jarlib-display test/example)"/>
+      <jarlib-display>
+        <fileset dir="${lib.home}" includes="${thirdparty.jarfiles.names}"/>
+      </jarlib-display>
+    </target>
+
+<!-- ==================== Javadoc Target ================================== -->
+
+<!--
+
+  The "javadoc" target creates Javadoc API documentation for the Java
+  classes included in your application.  Normally, this is only required
+  when preparing a distribution release, but is available as a separate
+  target in case the developer wants to create Javadocs independently.
+
+-->
+
+  <target name="javadoc" depends="compile"
+   description="Create Javadoc API documentation">
+
+    <mkdir          dir="${dist.home}/docs/api"/>
+    <javadoc sourcepath="${src}"
+                destdir="${dist.home}/docs/api"
+    			maxmemory="512m"
+           packagenames="edu.*,org.*,tufts.*">
+      <classpath refid="compile.classpath.common"/>
+    </javadoc>
+
+  </target>
+
+<!-- ==================== junit Target ================================== -->
+
+  <target name="junit" depends="compile" description="Run JUnit tests">
+    <available property="junit.present" classname="junit.framework.TestCase" >
+      <classpath>
+        <pathelement location="${junit.jar}" />
+        <pathelement path="${java.class.path}" />
+      </classpath>
+    </available>    
+
+  </target>
+    
+	
+	<!-- ==================== URL encoding Test ================================ -->
+    <target name="urltest" depends="compile" description="test URL encoding" >
+        <java classname="tufts.vue.urltest" failonerror="true" fork="true">
+      <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+    
+    </project>

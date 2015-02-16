@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="task_run">
+    
+<!-- ==================== Tasks to run VUE  ================================ -->
+
+    <target name="vue" depends="" description="Run the VUE application">
+      <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+        <!--jvmarg value="-verbosegc"/-->
+        <!-- Start with min of 10MB (VUE uses this much just starting up) -->
+        <jvmarg value="-Xms10m"/>
+        <!-- Increase max allowed memory from default 64MB to 2GB -->
+        <jvmarg value="-Xmx1024m"/>
+        <!-- Below wo JVM args are for the Mac runtime, and will be ignored on Windows. -->
+        <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+        <jvmarg value="-Dcom.apple.mrj.application.apple.menu.about.name=VUE"/>
+        <arg value="${vue.args}"/>
+        <classpath refid="runtime.classpath"/>
+      </java>
+    </target>
+	 <target name="vue_fr" depends="" description="Run the VUE application">
+	      <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+	      	<jvmarg value="-Duser.language=fr" />
+	      	<jvmarg value="-Duser.region=FR" />
+	        <!--jvmarg value="-verbosegc"/-->
+	        <!-- Start with min of 10MB (VUE uses this much just starting up) -->
+	        <jvmarg value="-Xms10m"/>
+	        <!-- Increase max allowed memory from default 64MB to 2GB -->
+	        <jvmarg value="-Xmx1024m"/>
+	        <!-- Below wo JVM args are for the Mac runtime, and will be ignored on Windows. -->
+	        <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+	        <jvmarg value="-Dcom.apple.mrj.application.apple.menu.about.name=VUE"/>
+	        <arg value="${vue.args}"/>
+	        <classpath refid="runtime.classpath"/>
+	      </java>
+	    </target>
+	    
+    
+     <target name="other" depends="" description="Run Other classes in VUE">
+      <java classname="edu.tufts.osidimpl.repository.fedora_2_2.FedoraRESTSearchAdapter" failonerror="true" fork="true">
+        <!--jvmarg value="-verbosegc"/-->
+        <!-- Start with min of 10MB (VUE uses this much just starting up) -->
+        <jvmarg value="-Xms10m"/>
+        <!-- Increase max allowed memory from default 64MB to 2GB -->
+        <jvmarg value="-Xmx1024m"/>
+        <!-- Below wo JVM args are for the Mac runtime, and will be ignored on Windows. -->
+        <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+        <jvmarg value="-Dcom.apple.mrj.application.apple.menu.about.name=VUE"/>
+        <arg value="${vue.args}"/>
+        <classpath refid="runtime.classpath"/>
+      </java>
+    </target>
+    
+    
+    <target name="vue-vanilla" depends="" description="Run the VUE application (Do NOT install custom VUE Look and Feels)">
+        <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+          <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+          <jvmarg value="-Dcom.apple.mrj.application.apple.menu.about.name=VUE"/>
+          <arg value="-skip_custom_laf"/>
+          <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+    
+    <target name="vue-mac-metal" depends="" description="Run the VUE application (Mac Brushed Metal LAF)">
+        <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+          <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+          <jvmarg value="-Dcom.apple.mrj.application.apple.menu.about.name=VUE"/>
+          <jvmarg value="-Dapple.awt.brushMetalLook=true"/>
+          <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+
+    <target name="vue-mac-metal-vanilla" depends="" description="Run the VUE application (Mac Brushed Metal LAF, No Customizations)">
+        <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+          <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+          <jvmarg value="-Dcom.apple.mrj.application.apple.menu.about.name=VUE"/>
+          <jvmarg value="-Dapple.awt.brushMetalLook=true"/>
+          <arg value="-skip_custom_laf"/>
+          <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+
+    <target name="vue-win-native" depends="" description="Run VUE - Windows Only (Windows Native LAF, No VUE Theme possible)">
+        <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+          <arg value="-nativeWindowsLookAndFeel"/>
+          <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+    
+    <target name="vue-win-force-metal" depends="" description="Run VUE - Windows Only (Force the java 1.4 Metal Theme, skipping java 1.5 Ocean Theme)">
+        <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+          <arg value="-skip_ocean_theme"/>
+          <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+    
+    <target name="vue-dr" depends="" description="Run just the VUE Digital Repository GUI">
+        <java classname="tufts.vue.DRBrowser" failonerror="true" fork="true">
+          <jvmarg value="-Xmx1024m"/>
+          <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+          <jvmarg value="-Dcom.apple.mrj.application.apple.menu.about.name=VUEDR"/>
+          <arg value="${vue.args}"/>
+        <classpath refid="runtime.classpath"/>
+        </java>
+    </target>
+    
+    <target name="vue-nv" depends="" description="Run the NarraVision demo (Mac)">
+      <pathconvert pathsep=":" property="classpath.nv" refid="runtime.classpath"/>
+        <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+          <jvmarg value="-Dapple.laf.useScreenMenuBar=true"/>
+          <jvmarg value="-Dapple.awt.brushMetalLook=true"/>
+          <jvmarg value="-Dcom.apple.mrj.application.apple.menu.about.name=NarraVision"/>
+          <jvmarg value="-Dtufts.vue.features=NarraVision"/>
+          <classpath>
+            <path refid="runtime.classpath"/>
+            <pathelement path="${lib.home}/BlackShipsImages.jar"/>
+          </classpath>
+        </java>
+    </target>
+
+    <target name="vuedemo" depends="all">
+      <java classname="tufts.vue.VUE" failonerror="true" fork="true">
+        <classpath refid="runtime.classpath"/>
+      </java>
+    </target>
+	
+    <target name="zotero">
+    	<ant antfile="../ZoteroFFExtension/build.xml" dir="../ZoteroFFExtension/" target="createDistributionXPI-NoCompile"/>
+ 	</target>
+	
+    <!-- Tasks to create releases for VUE -->
+    <target name="release" depends="clean,mac-dist,mac-16-dist,linux-jar,vue-applet,zotero">
+        <delete dir="${release.home}"/>
+        <mkdir dir="${release.home}"/>
+        <zip destfile="${release.home}/VUE.zip">
+            <zipfileset dir="${build.home}" includes="VUE.jar" filemode="755"/>
+         </zip>
+    	 <zip destfile="${release.home}/VUEApplet.zip">
+    	            <zipfileset dir="${build.home}" includes="VUEApplet.jar" prefix="vueapplet" filemode="755"/>
+    	 			<zipfileset dir="${build.home}/../../applet-samplehtml/" includes="**/*.*" prefix="vueapplet" filemode="755"/>
+    	  </zip>
+        <checksum file="${release.home}/VUEApplet.zip" property="appletMD5"/>
+         <checksum file="${release.home}/VUE.zip" property="genericMD5"/>
+         <zip destfile="${release.home}/VUE.app.zip">
+           <zipfileset dir="${build.home}/${MacDist}"  includes="**/VUE.app/**" filemode="755"/>
+         </zip>
+    	 <zip destfile="${release.home}/VUE-Java16.app.zip">
+    	   <zipfileset dir="${build.home}/${MacDist16}"  includes="**/VUE.app/**" filemode="755"/>
+    	 </zip>
+    	 <checksum file="${release.home}/VUE-Java16.app.zip" property="mac16MD5"/>
+         <checksum file="${release.home}/VUE.app.zip" property="macMD5"/>
+         <zip destfile="${release.home}/VUE_src.zip">
+<!--            <fileset dir="${lib.home}"/> -->
+<!-- +ls@140623; "${basedir}/../." -->
+             <zipfileset dir="${basedir}" prefix="vue">
+                <exclude name="**/release/*"/>
+                <exclude name="Nullsoft-Installer/*"/>
+                <exclude name="**/build/*"/>
+                <exclude name="**/installer/*"/>
+                <exclude name="**/altView/*"/>
+                <exclude name="**/*.class"/>
+                <exclude name="**/*.zip"/>
+             </zipfileset> 
+         </zip>
+         <checksum file="${release.home}/VUE_src.zip" property="srcMD5"/>
+         <!-- zip destfile="${release.home}/VUE-linux.zip">
+	   <zipfileset dir="${build.home}" includes="VUE-linux.jar" filemode="755"/>
+	 </zip>
+         <checksum file="${release.home}/VUE-linux.zip" property="genericMD5"/ -->
+         <echo file="${release.home}/checksum.txt" >
+VUE.zip - ${genericMD5}
+VUE.app.zip- ${macMD5}
+VUE-Java16.app.zip- ${mac16MD5}
+VUE_src.zip - ${srcMD5}     
+VUEApplet.zip - ${appletMD5}
+        </echo>
+    </target>
+    
+   <target name="installers" depends="release,linux-jar">
+          <taskdef name="nsis" classname="net.sf.nsisant.Task">
+            <classpath location="/usr/local/atsys/jenkins/nsis/nsis-2.46/ant/nsisant-1.2.jar"/>
+           </taskdef>
+		  <copy todir="${nullsoftjre.home}">
+  			<fileset dir="${jre.home}"/>
+	  	  </copy>
+
+           <!--creating installer using nullsoft-->
+           <nsis script="../Nullsoft-Installer/vue.nsi" verbosity="4" out="build.log" noconfig="yes"> 
+           </nsis>
+         
+         <!-- copying and zipping windows installer -->   
+         <delete dir="${basedir}/installer/Vue_Installer.zip"/>
+         <copy file="../Nullsoft-Installer/VUE.exe" todir="${basedir}/installer"/>
+           <zip destfile="${basedir}/installer/VUE_Installer.zip">
+            <zipfileset dir="${basedir}/installer/" includes="VUE.exe" filemode="755"/>
+         </zip>
+	 
+         <checksum file="${release.home}/VUEApplet.zip" property="appletMD5"/>
+         <checksum file="${release.home}/VUE.zip" property="genericMD5"/>
+         <checksum file="${release.home}/VUE-Java16.app.zip" property="mac16MD5"/>   	
+         <checksum file="${release.home}/VUE.app.zip" property="macMD5"/>
+         <checksum file="${release.home}/VUE_src.zip" property="srcMD5"/>
+         <checksum file="${basedir}/installer/VUE_Installer.zip" property="installerMD5"/>
+         <echo file="${release.home}/checksum.txt" >
+VUE.zip - ${genericMD5}
+VUE.app.zip- ${macMD5}
+VUE-Java16.app.zip- ${mac16MD5}
+VUE_src.zip - ${srcMD5}     
+VUEApplet.zip - ${appletMD5}
+        </echo>
+   	<copy file="../ZoteroFFExtension/dist/VUEZoteroFireFoxExtension.xpi" todir="${release.home}"/>
+
+    </target>
+        
+    </project>
+    
