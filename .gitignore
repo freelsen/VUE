@@ -1,0 +1,8 @@
+build
+build_ant
+Version.java
+*~
+*.swp
+*.bak
+VUE-core.jar
+

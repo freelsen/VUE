@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="data_source">
+    
+<!-- ==================== Artifact Data Source ================================ -->
+  <target name="jar-artifact"  
+          depends="compile"
+          description="Create Artifact.jar containing all supporting files">
+
+    <mkdir dir="dist/lib/osid"/>    
+    <delete file="dist/lib/osid/TuftsArtifact-1.0.jar"/>
+    <jar jarfile="dist/lib/osid/TuftsArtifact-1.0.jar"
+         basedir="${build.class}" 
+         includes="edu/tufts/osidimpl/repository/artifact/*.*"/>
+  </target>
+
+<!-- ==================== Local Files Data Source ================================ -->
+  <target name="jar-localfiles"  
+          depends="compile"
+          description="Create LocalFilesRepository.jar containing all supporting files">
+
+    <mkdir dir="dist/lib/osid"/>    
+    <delete file="dist/lib/osid/LocalFilesRepository-1.0.jar"/>
+    <jar jarfile="dist/lib/osid/LocalFilesRepository-1.0.jar"
+         basedir="${build.class}" 
+         includes="edu/tufts/osidimpl/repository/localfiles/*.*"/>
+  </target>
+
+<!-- ==================== Google Global Data Source ================================ -->
+  <target name="jar-googleglobal"  
+          depends="compile"
+          description="Create GoogleGlobal.jar containing all supporting files">
+
+    <mkdir dir="dist/lib/osid"/>    
+    <delete file="dist/lib/osid/GoogleGlobalRepository-1.0.jar"/>
+    <jar jarfile="dist/lib/osid/GoogleGlobalRepository-1.0.jar"
+         basedir="${build.class}" 
+         includes="edu/tufts/osidimpl/repository/google/global/*.*"/>
+  </target>
+
+<!-- ==================== Google Local Data Source ================================ -->
+  <target name="jar-googlelocal"  
+          depends="compile"
+          description="Create GoogleLocal.jar containing all supporting files">
+
+    <mkdir dir="dist/lib/osid"/>    
+    <delete file="dist/lib/osid/GoogleLocalRepository-1.0.jar"/>
+    <jar jarfile="dist/lib/osid/GoogleLcoalRepository-1.0.jar"
+         basedir="${build.class}" 
+         includes="edu/tufts/osidimpl/repository/google/local/*.*"/>
+  </target>
+
+  
+<!-- ==================== Fedora 2.0 Data Source ================================ -->
+  <target name="jar-fedora20"  
+          depends="compile"
+          description="Create Fedora20.jar containing all supporting files">
+
+    <mkdir dir="dist/lib/osid"/>    
+    <delete file="dist/lib/osid/Fedora20Repository-1.0.jar"/>
+    <jar jarfile="dist/lib/osid/Fedora20Repository-1.0.jar"
+         basedir="${build.class}" 
+         includes="edu/tufts/osidimpl/repository/fedora_2_0/*.class"/>
+    <jar jarfile="dist/lib/osid/Fedora20Repository-1.0.jar"
+         basedir="${build.class}" 
+		 update="true"
+         includes="tufts/oki/id/*.class"/>
+    <jar jarfile="dist/lib/osid/Fedora20Repository-1.0.jar"
+         basedir="${build.class}" 
+		 update="true"
+         includes="tufts/oki/shared2/*.class"/>
+  </target>
+
+<!-- ==================== Sakai Data Source ================================ -->
+  <target name="jar-sakai"  
+          depends="compile"
+          description="Create SakaiRepository-1.0.jar containing all supporting files">
+
+    <mkdir dir="dist/lib/osid"/>    
+    <delete file="dist/lib/osid/SakaiRepository-1.0a.jar"/>
+    <jar jarfile="dist/lib/osid/SakaiRepository-1.0a.jar"
+         basedir="${build.class}" 
+         includes="edu/tufts/osidimpl/repository/sakai/*.class"/>
+    <jar jarfile="dist/lib/osid/SakaiRepository-1.0a.jar"
+         basedir="${build.class}" 
+
+
+
+
+		 update="true"
+         includes="edu/tufts/osidimpl/authentication/sakai/*.class"/>
+  </target>
+  
+    </project>

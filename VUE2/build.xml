@@ -1,0 +1,77 @@
+<project name="vue" default="vue" basedir=".">
+
+<import file="buildfile/description.xml" />
+
+<!-- $Revision: 1.201 $ / $Date: 2010-04-23 20:59:52 $ / $Author: mike $ -->
+<!-- $Header: /home/svn/cvs2svn-2.1.1/at-cvs-repo/VUE2/src/build.xml,v 1.201 2010-04-23 20:59:52 mike Exp $ -->
+
+<!-- We want to ignore anything in the environment CLASSPATH variable -->
+<property name="build.sysclasspath"      value="ignore"/>
+
+<!-- ==================== File and Directory Names ======================== -->
+<!--
+  These properties generally define file and directory names (or paths) that
+  affect where the build process stores its outputs.
+-->
+<!-- "./.." -->
+  <property name="top.dir"     		value="${basedir}"/>
+  <!-- ".." -->
+  <property name="top"    		value="${basedir}"/>
+  <property name="src"        		value="${basedir}/src"/>
+  <!-- property name="build.top"  value="${top}"/ -->
+  <!--+ls-140623;   <property name="build.top"  value="${basedir}"/> -->
+  <property name="build.top"  		value="${top}"/>
+  <property name="build.home"  		value="${build.top}/build_ant"/>
+  <property name="build.class" 		value="${build.home}/classes" />
+  
+  <property name="dist.home"   		value="${basedir}/dist"/>
+  <property name="dist.src"   		value="${dist.home}/src"/>
+  
+  <property name="keystore"	   	value="${top.dir}/keystore/keystore.key"/>
+  <property name="release.home" 	value="${basedir}/release"/>
+  <property name="lib.home"    		value="${top}/lib"/>
+
+  <property name="linux.src"    	value="${top}/linux/src"/>
+  <property name="linux.class"    	value="${top}/linux/classes"/>
+  
+  <property name="jnilib.home"    	value="${top}/jnilibs"/>	
+  <property name="vue-core.jar" 	value="${build.top}/VUE-core.jar"/>
+  <property name="vue-lib.jar"  	value="${build.top}/VUE-lib.jar"/>
+  <property name="test.home"   		value="${top.dir}/test" />
+  <property name="test.lib"   		value="${test.home}/lib" />
+  <property name="junit.jar"   		value="${test.lib}/junit.jar" />
+  <property name="target.version" 	value="1.6"/>
+  <property name="MacDist" 		value="MacDist"/>
+  <property name="MacDist16" 		value="MacDist16"/>
+  <property name="jre.home" 		value="/usr/local/atsys/jenkins/jre/jre7"/>
+  <property name="nullsoftjre.home" 	value="/usr/local/atsys/jenkins/jenkins/workspace/VUE/VUE2/Nullsoft-Installer/jre"/>
+  <!-- NarraVision.jar is just a copy of VUE.jar.  On the PC, It detects via
+       the classpath if it's called anything with "NarraVision" in the
+       name to decide if it should run with MIT features -->
+  <property name="vue.jar"              value="${build.home}/VUE.jar"/>
+  <property name="vueapplet.jar"        value="${build.home}/VUEApplet.jar"/>
+  <property name="vueapplet-pack.jar"   value="${build.home}/VUEApplet.pack"/>
+  <property name="vue-linux.jar"        value="${build.home}/VUE-linux.jar"/>
+  <property name="narravision.jar"      value="${build.home}/NarraVision.jar"/>
+	
+<!-- +ls;@140623; -->
+<import file="buildfile/compile-ctl.xml"/>
+
+<import file="buildfile/compile-path.xml" />
+
+<import file="buildfile/target-prepare.xml" />
+
+<import file="buildfile/task-compile.xml" />
+
+<import file="buildfile/jar.xml" />
+
+<import file="buildfile/data-source.xml" />
+
+<import file="buildfile/task-core.xml" />
+    
+<import file="buildfile/task-run.xml" />
+
+<import file="buildfile/task-other.xml" />
+
+
+</project>

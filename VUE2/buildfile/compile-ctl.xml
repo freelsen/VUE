@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="compile_ctl" >
+
+<!--  ==================== Compilation Control Options ==================== -->
+<!--
+  These properties control option settings on the Javac compiler when it
+  is invoked using the <javac> task.
+
+  compile.debug        Should compilation include the debug option?
+  compile.deprecation  Should compilation include the deprecation option?
+  compile.optimize     Should compilation include the optimize option?
+-->
+  <property name="compile.debug"       value="true"/>
+  <property name="compile.deprecation" value="false"/>
+  <property name="compile.optimize"    value="false"/>
+
+  <!-- runtime argumennts for debugging -->
+  <property name="vue.args"    value=""/>
+
+    
+</project>

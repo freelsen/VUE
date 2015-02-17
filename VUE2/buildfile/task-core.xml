@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="task_core">
+<!-- ==================== Core ================================ -->
+  <target name="jar-core"
+          depends="compile,compile-linux"
+          description="Create VUE-core.jar - a jar file containing all the VUE classes, resources and config files from the CVS tree.">
+    <!-- echo message="top.dir is ${top.dir}"/ -->
+    <echo message="build.class is ${build.class}"/>
+    <antcall target="run-jar-core"/>
+  </target>
+
+  <target name="run-jar-core">
+    <jar zipfile="${vue-core.jar}" update="false" compress="false" index="true" duplicate="preserve">
+      <fileset dir="${src}">
+        <!-- exclude data/narravision?  2mb of meta-data... -->
+        <exclude name="**/old/**"/>
+        <exclude name="**/tmp/**"/>
+        <exclude name="altView/**"/>
+        <exclude name="build.xml"/>
+      	<exclude name="test/**"/>
+      	<exclude name="linux/**"/>
+      	<exclude name="data.narravision/**"/>
+      	<exclude name="MacOS/**"/>      
+      	<exclude name="maclib/**"/>
+      	<exclude name="java15/**"/>
+      	<exclude name="tufts/vue/images/*.ico"/>
+      	<exclude name="tufts/vue/images/archived/**"/>
+        <include name="**/*.xml"/>
+        <include name="**/*.conf"/>
+        <include name="**/*.css"/>
+        <include name="**/*.rdfs" />
+        <include name="**/*.rdf" />
+        <include name="**/*.owl" />
+        <include name="**/*.properties"/>
+        <include name="tufts/vue/resources/**"/>
+        <include name="tufts/vue/images/**"/>
+        <include name="tufts/vue/gui/icons/**"/>
+      </fileset>
+      <fileset dir="${build.class}"/>
+    </jar>
+  </target>
+  <target name="jar-core-applet"
+     depends="compile,compile-linux"
+	 description="Create VUE-core.jar - a jar file containing all the VUE classes, resources and config files from the CVS tree.">
+	 <echo message="build.class is ${build.class}"/>
+	 <antcall target="run-jar-core-applet"/>
+  </target>
+  <target name="run-jar-core-applet">
+    <jar zipfile="${vue-core.jar}" update="false" compress="true" index="true" duplicate="preserve">
+      <fileset dir="${src}">
+        <!-- exclude data/narravision?  2mb of meta-data... -->
+        <exclude name="**/old/**"/>
+        <exclude name="**/tmp/**"/>
+        <exclude name="altView/**"/>
+        <exclude name="build.xml"/>
+      	<exclude name="test/**"/>
+      	<exclude name="linux/**"/>
+      	<exclude name="data.narravision/**"/>
+      	<exclude name="MacOS/**"/>      
+      	<exclude name="maclib/**"/>
+      	<exclude name="java15/**"/>
+        <include name="**/*.xml"/>
+        <include name="**/*.conf"/>
+        <include name="**/*.css"/>
+        <include name="**/*.rdfs" />
+        <include name="**/*.rdf" />
+        <include name="**/*.owl" />
+        <include name="**/*.properties"/>
+        <include name="tufts/vue/resources/**"/>
+        <include name="tufts/vue/images/**"/>
+        <include name="tufts/vue/gui/icons/**"/>
+      </fileset>
+      <fileset dir="${build.class}">
+    	<exclude name="edu/tufts/osidimpl/**"/>
+      </fileset>
+      <indexjars>
+      	<fileset dir="${lib.home}"/>	
+      </indexjars>
+    </jar>
+  </target>	
+  <target name="sign-applet-jars">
+ 	<signjar
+	  	alias="mykey"
+	  	storepass="vuevue"
+	  	keystore="${keystore}"
+	  	jar="${vue-core.jar}">
+	</signjar>
+  	<signjar
+  		alias="mykey"
+  		storepass="vuevue"
+  		keystore="${keystore}"
+  		jar="${vue.jar}">
+    </signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/google-collect-snapshot-20090211.jar">
+  	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/jaxrpc-api-unsigned.jar">
+  	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/MITAuthenticationTypes.jar">
+  	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/MITRepositoryTypes.jar">
+  	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/jena-2.5.3.jar">
+  	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/OsidProvider.jar">
+  	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/commons-discovery.jar">
+  	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/castor-1.3-core.jar">
+  	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/castor-1.3-xml.jar">
+  	</signjar>
+ 	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/xercesImpl-2.7.1.jar">
+	</signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/commons-logging.jar">
+    </signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/commons-lang-2.4.jar">
+    </signjar>
+  	<signjar
+  	  alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/MITSearchTypes.jar">
+  	</signjar>
+  	<signjar
+      alias="mykey"
+  	  storepass="vuevue"
+  	  keystore="${keystore}"
+  	  jar="../lib/VUE-MacOSX.jar">
+    </signjar>
+  	<signjar
+      alias="mykey"
+      storepass="vuevue"
+      keystore="${keystore}"
+  	  jar="../lib/looks-2.1.4.jar">
+    </signjar>
+  </target>
+  <target name="run-jar-core-old">
+    <jar zipfile="${vue-core.jar}" update="true" compress="false" index="true">
+      <fileset dir="${src}" includes="**/*.xml"/>
+      <fileset dir="${src}" includes="**/*.conf"/>
+      <fileset dir="${src}" includes="**/*.properties"/>
+      <fileset dir="${src}" includes="tufts/vue/resources/**"/>
+      <fileset dir="${src}" includes="tufts/vue/images/**"/>	
+      <fileset dir="${build.class}"/>
+    </jar>
+  </target>
+
+  <target name="check-third-party-jars-against_VUE.jar">
+    <!-- This target will set the property "vue.jar.current" if the support libraries that go into VUE.jar are 
+         already older than the current VUE.jar (meaning, we don't need to rebuild VUE.jar) -->
+    <uptodate property="vue.jar.current" targetfile="${vue.jar}">
+      <srcfiles dir="${lib.home}" includes="${thirdparty.jarfiles.names}"/>
+      <srcfiles dir="." includes="${vue-core.jar}"/>
+    </uptodate>
+  </target>
+  
+  <target name="jar"
+          depends="jar-core,check-third-party-jars-against_VUE.jar" unless="vue.jar.current"
+          description="Create VUE.jar - a single, distributable, runnable jar file containing VUE and all supporting libraries.">
+  	     <!-- Create our packer task -->
+  	<!--     <taskdef name="pack200"
+  	    	classname="com.sun.tools.apache.ant.pack200.Pack200Task"
+  	    	classpath="${lib.home}/Pack200Task.jar"/>
+	-->
+  	     <!-- Create our unpacker task -->
+  	 <!--    <taskdef name="unpack200"
+  	    	classname="com.sun.tools.apache.ant.pack200.Unpack200Task"
+  	    	classpath="${lib.home}/Pack200Task.jar"/>
+	-->
+    <tstamp/>
+    <echo message="Building ${vue.jar}..."/>
+    <jar destfile="${vue.jar}" compress="true" index="true" update="false" duplicate="preserve">
+        <manifest>
+        <attribute name="Description" value="Tufts VUE 1.x (Visual Understanding Environment)"/>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Built" value="${TODAY} ${TSTAMP}"/>
+        <attribute name="Build-Platform" value="${os.name} ${os.version} ${os.arch}"/>
+        <attribute name="Main-Class" value="tufts.vue.VUE"/>
+      </manifest>
+        <!-- zipfileset src="${basedir}/VUE-core.jar" excludes="**/*.properties"/ example excludes that works for one file -->
+        <zipfileset src="${vue-core.jar}"/>
+        <zipgroupfileset dir="${lib.home}" includes="${thirdparty.jarfiles.names}"
+        	excludes="org/apache/tools/ant/**"/>
+    	<zipgroupfileset dir="${lib.home}" includes="${thirdparty.jarfiles.names.extendedFeatures}"
+    	  	        	excludes="org/apache/tools/ant/**"/>
+        <!-- may be able to modify this to exclude README's, .txt files, etc -->
+    </jar>
+    <jar jarfile="${vue.jar}"
+         basedir="${basedir}" 
+		 update="true"
+         includes="osid.properties"/>
+  	 
+  
+
+  </target>
+  <target name="linux-jar" depends="compile-linux,jar">
+    <!--
+    <echo message="Building linux jar..."/>
+    <copy file="${vue.jar}" tofile="${vue-linux.jar}"/>
+    <jar jarfile="${vue-linux.jar}"
+    	 basedir="${linux.class}"
+    	 update="true"
+    	 />
+    -->
+  </target>
+  <target name="jar-narravision" depends="jar"
+          description="Create NarraVision.jar - a single, distributable, runnable jar file containing NarraVision and all supporting libraries.">
+    <tstamp/>
+    <echo message="Building ${narravision.jar}..."/>
+    <jar destfile="${narravision.jar}" compress="true" index="true" update="false" duplicate="preserve">
+      <manifest>
+        <attribute name="Description" value="MIT NarraVision Alpha (Derivative of Tufts VUE: Visual Understanding Environment)"/>
+        <attribute name="Built-By" value="${user.name}"/>
+        <attribute name="Built" value="${TODAY} ${TSTAMP}"/>
+        <attribute name="Build-Platform" value="${os.name} ${os.version} ${os.arch}"/>
+        <attribute name="Main-Class" value="tufts.vue.VUE"/>
+      </manifest>
+      <zipfileset src="${vue-core.jar}"/>
+      <zipgroupfileset dir="${lib.home}" includes="${thirdparty.jarfiles.names}"/>
+      <zipfileset src="${lib.home}/BlackShipsImages.jar"/> <!-- try exporting blackships startup file as a vue zip archive... -->
+      <!-- zipfileset src="${build.home}/VUE.jar"/>  this is a crazy slow method of doing this: it's file compressed from 50mb -->
+      
+    </jar>
+  </target>
+
+
+  <target name="jar-lib"
+          description="Create VUE-lib.jar - a separate jar file containing the kitchen-sink set of third party libraries to run VUE (dev convenience target).">
+    <!-- Note: this pathcovert is for the debug output only.  It isn't used in the zipping... -->
+    <pathconvert pathsep=" " property="info.jarfiles" refid="thirdparty.jarfiles.classpath"/>
+    <echo message="Jaring: ${info.jarfiles}"/>
+    <!-- There is a bunch of of crap in the lib file we really don't need: figure out how to exclude. -->
+    <!-- Stuff like .java sources, .html files and .txt files, and from axis-ant.jar, a big fat js.jar (javascript) & bsf.jar files? -->
+    <!-- Also: do we really need the /hyph/*.hyp files?  Are these Hyphenation Dictionaries? -->
+    <jar destfile="${vue-lib.jar}" compress="false" index="true" update="false" duplicate="preserve">
+      <!-- zipgroupfileset is extremely picky and limited: each one can name one dir & one string represeting names from that dir,
+        and cannont include sub-items, such as a filelist, which would have been a bit cleaner for an ordered set of jar files. -->
+      <zipgroupfileset dir="${lib.home}" includes="${thirdparty.jarfiles.names}"/>
+      <zipgroupfileset dir="${lib.home}" includes="${thirdparty.jarfiles.names.extendedFeatures}"/>
+    </jar>
+  </target>
+
+  <target name="jar-lib-minimal"
+          description="Create VUE-lib-minimal.jar - a jar file containing the minimal set libraries to run VUE (testing).">
+    <echo message="Jaring: ${thirdparty.jarfiles.names.minimal}"/>
+    <jar destfile="VUE-lib-minimal.jar" compress="true" index="true" update="false">
+      <zipgroupfileset dir="${lib.home}" includes="${thirdparty.jarfiles.names.minimal}"/>
+    </jar>
+  </target>
+  
+  <target name="mac-lib" depends="prepare"
+          description="Create the library containing Mac OS X specific VUE code (Mac OS X platform build only)">
+    <!-- Build for stuff that makes use of the Apple com.apple.cocoa.{application,foundation}.* classes
+         that reside in /System/Library/Java in Mac OS X, which can access native OS X features via
+         classes such as NSWindow, NSApplcation, etc. -->
+    <mkdir dir="maclib/classes"/>
+    <javac srcdir="${src}" 
+           destdir="maclib/classes"
+             debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           listfiles="yes"
+           classpath="/System/Library/Java"
+           source="${target.version}"
+           target="${target.version}"
+           >
+      <include name="maclib/**/*.java"/>
+    </javac>
+    <jar destfile="${lib.home}/VUE-MacOSX.jar" compress="true" index="false" update="false">
+      <fileset dir="maclib/classes" includes="tufts/macosx/**"/>
+    </jar>
+  </target>
+  <target name="mac-lib-safe" depends="prepare"
+          description="Create a minimal library containing Mac OS X specific noop calls for building w/out the deprecated cocoa classes">
+    <!-- Build for stuff that makes use of the Apple com.apple.cocoa.{application,foundation}.* classes
+         that reside in /System/Library/Java in Mac OS X, which can access native OS X features via
+         classes such as NSWindow, NSApplcation, etc. -->
+    <mkdir dir="maclib/classes"/>
+    <javac srcdir="${src}" 
+           destdir="maclib/classes"
+             debug="${compile.debug}"
+        deprecation="${compile.deprecation}"
+           optimize="${compile.optimize}"
+           listfiles="yes"
+           classpath="${lib.home}/log4j-1.2.12.jar"
+           source="${target.version}"
+           target="${target.version}"
+           >
+      <include name="maclib/MacOSX16Safe.java"/>
+      <include name="maclib/MacOSX.java"/>
+    </javac>
+    <jar destfile="${lib.home}/VUE-MacOSX.jar" compress="true" index="false" update="false">
+      <fileset dir="maclib/classes" includes="tufts/macosx/**"/>
+    </jar>
+  </target>
+     
+  <target name="all" depends="clean,mac-dist,linux-jar" description="Rebuild everything from scratch."/>
+  <target name="vue-applet" depends="jar-core">
+	
+
+  	    <tstamp/>
+  	    <echo message="Building ${vueapplet.jar}..."/>
+  	    <jar destfile="${vueapplet.jar}" compress="true" index="true" update="false" duplicate="preserve">
+  	        <manifest>
+  	        <attribute name="Description" value="Tufts VUE 3.x (Visual Understanding Environment)"/>
+  	        <attribute name="Built-By" value="${user.name}"/>
+  	        <attribute name="Built" value="${TODAY} ${TSTAMP}"/>
+  	        <attribute name="Build-Platform" value="${os.name} ${os.version} ${os.arch}"/>
+  	        <attribute name="Main-Class" value="tufts.vue.VUE"/>
+  	      </manifest>
+  	        <!-- zipfileset src="${basedir}/VUE-core.jar" excludes="**/*.properties"/ example excludes that works for one file -->
+  	        <zipfileset src="${vue-core.jar}"/>
+  	        <zipgroupfileset dir="${lib.home}" includes="${thirdparty.jarfiles.names}"
+  	        	excludes="org/apache/tools/ant/**"/>
+  	        <!-- may be able to modify this to exclude README's, .txt files, etc -->
+  	    </jar>
+  	    <jar jarfile="${vueapplet.jar}"
+  	         basedir="${basedir}" 
+  			 update="true"
+  	         includes="osid.properties"/>
+  	  	 
+  	  
+
+
+  	<signjar
+  	    alias="mykey"
+  	    storepass="vuevue"
+  		keystore="${keystore}"
+  		jar="${vueapplet.jar}">
+  	</signjar>
+  	
+  	<!--
+    <pack200 src="${vueapplet.jar}"
+    		 destfile="${vue-pack.jar}"
+    		 effort="9"
+    	 	 modificationtime="latest"
+    		 deflatehint="false"
+    		 unknownattribute="error"
+  			 verbose="1"
+ 	/> -->
+  </target>
+  <target name="mac" depends="clean,mac-dist"/>
+
+  <target name="clean"
+          description="Delete all build and intermediate files, leaving only the sources.">
+    <delete dir="${build.home}"/>
+    <delete dir="${linux.class}"/>
+    <delete file="${vue-core.jar}"/>
+    <!--delete file="VUE-lib.jar"/-->
+    <delete file="VUE-lib-minimal.jar"/>
+  </target>
+  
+  <target name="clean2"
+          description="Delete all build and intermediate files, leaving only the sources, but leave build directory">
+    <delete dir="${build.home}/classes"/>
+    <delete dir="${build.home}/VUE.app"/>
+    <delete file="${build.home}/VUE.jar"/>
+    <delete dir="${linux.class}"/>
+    <delete file="${vue-core.jar}"/>
+</target>
+
+  <target name="clean-emacs">
+    <delete verbose="true">
+      <fileset dir="." defaultexcludes="no" includes="**/*~"/>
+    </delete>
+  </target>
+
+  <target name="clean-logs">
+    <delete verbose="true">
+      <fileset dir="." defaultexcludes="no" includes="**/*.log"/>
+    </delete>
+  </target>
+ 
+  
+
+    <property name="mac.bundle_signature" value="TVUE"/> <!-- must match MacOS/Info.plist CFBundleSignature -->
+
+    <target name="mac-dist" depends="jar" description="Creates a Mac OS X distributable Applcation directory for VUE">
+      <make-mac-osx-application dir="${MacDist}" name="VUE" plist="Info.plist"/>
+    </target>
+	
+	 <target name="mac-16-dist" depends="jar" description="Creates a Mac OS X distributable Applcation directory for VUE">
+	      <make-mac-osx-application dir="${MacDist16}" name="VUE" plist="Info16.plist"/>
+	 </target>
+
+    <target name="mac-dist-raw"> 
+    	<make-mac-osx-application name="VUE" plist="Info.plist"/> 
+    </target>
+    
+    
+    <target name="mac-dist-15" depends="jar" description="Creates a Mac OS X distributable Applcation directory for VUE under Java 1.5">
+      <make-mac-osx-application name="VUE15" plist="Info-Java15.plist"/>
+    </target>
+
+    <target name="mac-dist-15-raw"> <make-mac-osx-application name="VUE15" plist="Info-Java15.plist"/> </target>
+    
+    <target name="mac-dist-nv" depends="jar-narravision" description="Creates a Mac OS X distributable Applcation directory for NarraVision.">
+    	<!--
+    	<sleep seconds="300"/>
+      <make-mac-osx-application name="NarraVision" plist="Info-NarraVision.plist" jar-0="${narravision.jar}"/>
+       
+      <extra-tasks>
+        <copy file="${lib.home}/BlackShipsImages.jar" todir="${build.home}/NarraVision.app/Contents" verbose="true"/>
+      </extra-tasks>
+      </make-mac-osx-application>
+      -->
+    </target>
+
+    <target name="test" depends="mac-dist,mac-dist-nv"/>
+
+    <macrodef name="make-mac-osx-application">
+      <attribute name="name" description="Application name"/>
+      <attribute name="plist" description="Source for Info.plist file"/>
+      <attribute name="dir" description="Subdir to put build in"/>
+      <element name="extra-tasks" optional="yes"/>
+      <!-- Under normal cirumstances, the caller will never make use of any of the attributes below.
+           They mostly operate as local variables. -->
+      <attribute name="mac.appdir" default="${build.home}/@{dir}/@{name}.app"/>
+      <attribute name="contents" default="@{mac.appdir}/Contents"/>
+      <attribute name="jar-0" default="${vue.jar}"/>
+      <!--attribute name="jar-1" default="@{jar-0}"/-->
+      <sequential>
+        <echo>*** Building Mac OS X application "@{name}" to @{mac.appdir}</echo>
+        <mkdir dir="@{contents}/MacOS"/>
+        <mkdir dir="@{contents}/Resources/Java"/>
+        <echo file="@{contents}/PkgInfo" message="APPL${mac.bundle_signature}"/>
+        <!-- On Mac OS X, See: /System/Library/Frameworks/JavaVM.framework/Versions/A/Resources/MacOS/JavaApplicationStub -->
+        <copy file="MacOS/JavaApplicationStub" todir="@{contents}/MacOS" verbose="true"/>
+        <chmod file="@{contents}/MacOS/JavaApplicationStub" perm="755" verbose="true"/>
+        <copy file="MacOS/VUE.icns" todir="@{contents}/Resources" verbose="true"/>
+        <copy file="MacOS/@{plist}" tofile="@{contents}/Info.plist" verbose="true"/>
+        <!-- we get away with the default being to copy ${vue.jar} twice because
+              it won't bother to copy it the second time if it's already there -->
+        <copy file="@{jar-0}" todir="@{contents}" verbose="true"/>
+        <!--copy file="@{jar-1}" todir="@{contents}" verbose="true"/-->
+      	<copy file="${jnilib.home}/libquaqua.jnilib" todir="@{contents}/Resources/Java"/>
+      	<copy file="${jnilib.home}/libquaqua64.jnilib" todir="@{contents}/Resources/Java"/>
+        <extra-tasks/>
+      </sequential>
+    </macrodef>
+
+    <target name="deprecated-mac-dist-dev" depends="jar-core">
+      <!-- for dev: a quicker build of VUE.app that includes VUE-core.jar & VUE-lib.jar
+           separately, skipping the build of VUE.jar that takes forverever.  Uses
+           the hacked Info-dev.plist that names to two jars instead of the one VUE.jar.
+           NOTE THAT YOU NEED TO MAKE SURE YOU'VE MANUALLY BUILT JAR-LIB BEFORE USING THIS.
+           SMF July 2009: mac-mac-osx-application changed to be faster, no longer supports 2-file mode of operation.
+           -->
+      <make-mac-osx-application name="VUEDev"
+                                plist="Info-dev.plist"
+                                jar-0="${vue-core.jar}"
+                                jar-1="${vue-lib.jar}"/>
+        <!--
+        <extra-tasks>
+          <delete file="${app.contents}/VUE.jar"/
+          <copy file="${vue-core.jar}" todir="${app.contents}" verbose="true"/>
+          <copy file="${vue-lib.jar}" todir="${app.contents}" verbose="true"/>
+        </extra-tasks>
+      </make-mac-osx-application>
+          -->
+    </target>
+
+    <!--target name="mac-dist-common">
+      <mkdir dir="${app.contents}/MacOS"/>
+      <mkdir dir="${app.contents}/Resources/Java"/>
+      <echo file="${app.contents}/PkgInfo" message="APPL${mac.bundle_signature}"/>
+      <copy file="MacOS/JavaApplicationStub" todir="${app.contents}/MacOS" verbose="true"/>
+      <chmod file="${app.contents}/MacOS/JavaApplicationStub" perm="755" verbose="true"/>
+      <copy file="MacOS/VUE.icns" todir="${app.contents}/Resources" verbose="true"/>
+    </target-->
+    
+    <target name="version">
+      <tstamp/>
+	  <!-- generate file into src tree - peter 21-Jul-06 -->
+	  <echo file="${src}/tufts/vue/Version.java">
+// generated by ${ant.file}
+package tufts.vue;
+/** generated by ${ant.file} ${TODAY} ${TSTAMP} */
+public final class Version {
+/** ${TODAY} at ${TSTAMP} by ${user.name} on ${os.name} ${os.version} ${os.arch} JVM ${java.runtime.version} */
+public static final String
+        Date = "${TODAY}",
+        Time = "${TSTAMP}",
+        User = "${user.name}",
+        Platform = "${os.name} ${os.version} ${os.arch}",
+        JVM = "${java.runtime.version}(bits=${sun.arch.data.model})",
+        AllInfo = "${TODAY} at ${TSTAMP} by ${user.name} on " + Platform + " JVM " + JVM,
+        WhatString = "@(#)VUE: built " + AllInfo;
+}
+</echo>
+<!-- Compile file as part of regular compile target - peter 21-Jul-06  
+	<javac srcdir="${build.home}" 
+           destdir="${build.class}"
+           optimize="${compile.optimize}"
+           listfiles="yes"
+           >
+      <include name="Version.java"/>
+    </javac>   -->
+    </target>
+    
+    <target name="versionOld">
+      <exec outputproperty="datestr" executable="date">
+        <arg value="+%B %e, %Y"/></exec>
+      <buildnumber/>
+      <echo file="version.java">
+package tufts.vue;
+cclass Version {
+        static final String buildDay = "${datestr}";
+        static final String buildTime = "${datestr}";
+        static final String buildNumber = "${build.number}";
+}
+      </echo>
+    </target>
+    </project>

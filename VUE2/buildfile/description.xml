@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="description">
+
+  <description>
+    This build file can build all the VUE sources, as well as package
+    them into various jar files useful for testing or test
+    distribution.  This including a Mac Finder or Windows Explorer
+    double-clickable (runnable) jar file that inclues all required
+    third party libraries (if java has already been installed on the
+    system).  Or it can be run from the command line with:
+    
+        java -jar VUE.jar
+    
+    Note that this is really only useful for testing, as it still
+    doesn't let us set a VUE icon for the file, or install a JVM if
+    one isn't present.  The targets for creating VUE-lib.jar and
+    VUE-core.jar are for convenience.  The VUE-lib.jar portion is huge
+    and slow to create, whereas VUE-core.jar is just the VUE classes
+    and resources, and is quick to create.  This is convenient for
+    frequently moving around just VUE-core.jar and running via:
+
+        java -cp VUE-core.jar:VUE-lib.jar tufts.vue.VUE
+
+    Mac Version: a Mac OS X Application directory can be build with
+    the mac-dist target. It uses template info in the MacOS directory
+    to create build/VUE.app, and then copy the current VUE.jar there,
+    at which point it's ready to go as a Mac OS X app.  Just drop the folder
+    into /Applications (or wherever you like), double-click it and
+    you're off and running.
+      test
+  </description>    
+    
+    </project>
