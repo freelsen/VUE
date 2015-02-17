@@ -107,6 +107,7 @@ import tufts.vue.gui.FullScreen;
 import tufts.vue.gui.GUI;
 import tufts.vue.gui.VueFrame;
 import tufts.vue.gui.VueMenuBar;
+import tufts.vue.ls.LsFunction;
 import tufts.vue.ui.InspectorPane;
 import edu.tufts.vue.compare.ui.MergeMapsControlPanel;
 import edu.tufts.vue.dsm.impl.VueDataSourceManager;
@@ -127,6 +128,8 @@ import javax.swing.plaf.ProgressBarUI;
 public class VUE
     implements VueConstants
 {
+	public static LsFunction mlsfunction = new LsFunction(); //+ls@150217;
+	
     public static final boolean VUE3 = true;
     
     public static boolean BLOCKING_OSID_LOAD = edu.tufts.vue.dsm.impl.VueDataSourceManager.BLOCKING_OSID_LOAD;

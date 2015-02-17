@@ -136,10 +136,6 @@ public class LWNode extends LWContainer
 
     private void initNode() {
         enableProperty(KEY_Alignment);
-        //+ls;140316;
-        //Alignment a = this.mAlignment.get();
-        //this.mAlignment.set(Alignment.CENTER);
-        //this.mAlignment = Alignment.CENTER;
     }
     
     LWNode(String label, float x, float y, RectangularShape shape)

@@ -28,7 +28,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.Dimension2D;
 import javax.swing.*;
 
-import java.awt.event.MouseWheelEvent;
 /**
  *
  * Zoom tool handler for MapViewer, and static code for computing
@@ -500,58 +499,6 @@ public class ZoomTool extends VueTool
         if (zoomedTo != null)
             pc.pickDepth = zoomedTo.getPickLevel() + 1;
         return pc;
-    }
-    
-
-  //+ls;140321;
-    boolean lswheelup = false;
-    public void lsSetWheelup( boolean b ) { lswheelup = b; }
-    float lsmapx = (float) 0.0;
-    float lsmapy = (float) 0.0;
-    public void lsSetMapxy( float x, float y) { lsmapx = x; lsmapy = y; }
-    
-    public boolean lsHandleMouseWheel(MouseWheelEvent e)
-    {
-        if (DEBUG.TOOL) System.out.println(this + " handleMouseReleased " + e);
-
-        if (ignoreRelease) {
-            ignoreRelease = false;
-            return true;
-        }
-
-        //+ls;140321;
-        if( e.getWheelRotation() <0)
-        	this.lswheelup = true;
-        else
-        	this.lswheelup = false;
-        
-        //Point p = e.getPoint();
-//        Point2D p = e.getMapPoint();
-        Point2D p =new Point2D.Float(lsmapx, lsmapy);
-
-        if (e.isShiftDown() || e.getButton() != MouseEvent.BUTTON1
-            //|| toolKeyEvent != null && toolKeyEvent.isShiftDown()
-            ) {
-            if ( lswheelup ||  disableToggleZoom)
-                setZoomBigger(p);
-        //    else if (isZoomOutToMapMode())
-        //    	setZoom(1.0);
-            else            	
-                setZoomSmaller(p);
-        } else {
-//            Rectangle box = e.getSelectorBox();
-//            if (box != null && box.width > 10 && box.height > 10) {
-//                setZoomFitRegion(e.getMapSelectorBox()); // TODO: ensure a zoom-cap
-//            } else {
-                if ( lswheelup )
-                    setZoomSmaller(p);
-          //      else if (isZoomOutToMapMode())
-            //    	setZoom(1.0);
-                else
-                    setZoomBigger(p);
-//            }
-        }
-        return true;
     }
     
     @Override
