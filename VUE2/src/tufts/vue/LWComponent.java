@@ -1325,7 +1325,6 @@ public class LWComponent
     public final ColorProperty mStrokeColor = new ColorProperty(KEY_StrokeColor, java.awt.Color.darkGray);
     public final FloatProperty mStrokeWidth = new FloatProperty(KEY_StrokeWidth) { void onChange() { rebuildStroke(); }};
     public final EnumProperty<Alignment> mAlignment = new EnumProperty(KEY_Alignment, Alignment.LEFT) {
-    //public final EnumProperty<Alignment> mAlignment = new EnumProperty(KEY_Alignment, Alignment.CENTER) {
             void onChange() { layout(KEY_Alignment); }
         };
 

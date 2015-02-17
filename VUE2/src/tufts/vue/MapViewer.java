@@ -6048,9 +6048,6 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
         private static DockWindow DebugInspector;
         private static DockWindow DebugIntrospector;
         private DockWindow debugPanner;
-
-        //+ls;140318;
-        private boolean lskeydown = false;
         
     public void keyPressed(KeyEvent e) {
 
@@ -7658,7 +7655,7 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
 
 
 //            	//+ls;140318;
-            	if( lskeydown )
+            	if( LsFunction.mthis.isFunctionKey() )
             	{
 	                // TODO: above VueSelection should never be null.
 	                

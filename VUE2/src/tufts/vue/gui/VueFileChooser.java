@@ -70,18 +70,14 @@ public class VueFileChooser extends JFileChooser{
 	private static VueFileChooser createVueFileChooser()
 	{
 		VueFileChooser chooser = null;
-		// try{
+
 		// +ls;-140330;
 		String s = LsFunction.mthis.getActiveMapLocation();
-		//System.out.println(s);
 		if( s == null)
 			chooser = new VueFileChooser();
 		else
 			chooser = new VueFileChooser(new File(s));
-	 // } catch(Throwable t)
-	 // {
-	 //	  chooser.setUI(new javax.swing.plaf.metal.MetalFileChooserUI(chooser));
-	 // }
+
 		return chooser;
 	}
 	public static VueFileChooser getVueFileChooser()
@@ -94,8 +90,12 @@ public class VueFileChooser extends JFileChooser{
     	 // I'm not quite sure this will accomplish what I want, need to come 
     	 // up with a test case to see if this will really go.
     	 // MK
+		// try{
 			chooser = createVueFileChooser();
-			
+		 // } catch(Throwable t)
+		 // {
+		 //	  chooser.setUI(new javax.swing.plaf.metal.MetalFileChooserUI(chooser));
+		 // }			
     		if (VueUtil.isCurrentDirectoryPathSet()) 
     			chooser.setCurrentDirectory(new File(VueUtil.getCurrentDirectoryPath()));
     	}

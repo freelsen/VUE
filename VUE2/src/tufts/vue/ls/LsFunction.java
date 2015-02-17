@@ -29,6 +29,7 @@ public class LsFunction {
 	// ----------shortkey on mapviewer; --------------------
     //+ls;140318;
     private boolean mfunkey = false;
+	public boolean isFunctionKey(){ return mfunkey; }
     private VueTool[] getToolbarTopLevelTools()
     {
     	return VueToolbarController.getController().getTopLevelTools();
@@ -97,8 +98,6 @@ public class LsFunction {
     }
     public boolean onMapViewerMouseWheelMoved(MouseWheelEvent e)
     {
-    	//+ls;140321;
-        //System.out.println("--- mouse wheel.");
         if( (e.isControlDown()))
         {        
             boolean iswheelup = false;
@@ -107,14 +106,12 @@ public class LsFunction {
             
             Point2D p = getMapXY(e);
             //if( e.getButton() == MouseEvent.BUTTON1)
-            {
-            	//VueTool[] tools = getToolbarTopLevelTools();
-                //ZoomTool zoomtool = (ZoomTool)tools[5];
-                if ( iswheelup )
-                	ZoomTool.setZoomSmaller(p);
-                else
-                	ZoomTool.setZoomBigger(p);
-            }
+        	//VueTool[] tools = getToolbarTopLevelTools();
+            //ZoomTool zoomtool = (ZoomTool)tools[5];
+            if ( iswheelup )
+            	ZoomTool.setZoomSmaller(p);
+            else
+            	ZoomTool.setZoomBigger(p);
             
             e.consume(); 
             
