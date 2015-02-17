@@ -39,7 +39,7 @@ import javax.swing.plaf.basic.BasicFileChooserUI;
 
 import tufts.Util;
 import tufts.vue.VueUtil;
-import tufts.vue.VUE;
+import tufts.vue.ls.LsFunction;
 
 import edu.tufts.vue.preferences.PreferencesManager;
 
@@ -66,6 +66,24 @@ public class VueFileChooser extends JFileChooser{
 		
 	}
 	
+	//+ls@150217;
+	private static VueFileChooser createVueFileChooser()
+	{
+		VueFileChooser chooser = null;
+		// try{
+		// +ls;-140330;
+		String s = LsFunction.mthis.getActiveMapLocation();
+		//System.out.println(s);
+		if( s == null)
+			chooser = new VueFileChooser();
+		else
+			chooser = new VueFileChooser(new File(s));
+	 // } catch(Throwable t)
+	 // {
+	 //	  chooser.setUI(new javax.swing.plaf.metal.MetalFileChooserUI(chooser));
+	 // }
+		return chooser;
+	}
 	public static VueFileChooser getVueFileChooser()
 	{
 		VueFileChooser chooser = null;
@@ -76,18 +94,8 @@ public class VueFileChooser extends JFileChooser{
     	 // I'm not quite sure this will accomplish what I want, need to come 
     	 // up with a test case to see if this will really go.
     	 // MK
-		 // try{
-			// +ls;-140330;
-			String s = VUE.getActiveMap().getSaveLocation();
-			//System.out.println(s);
-			if( s == null)
-				chooser = new VueFileChooser();
-			else
-				chooser = new VueFileChooser(new File(VUE.getActiveMap().getSaveLocation()));
-		 // } catch(Throwable t)
-		 // {
-		 //	  chooser.setUI(new javax.swing.plaf.metal.MetalFileChooserUI(chooser));
-		 // }
+			chooser = createVueFileChooser();
+			
     		if (VueUtil.isCurrentDirectoryPathSet()) 
     			chooser.setCurrentDirectory(new File(VueUtil.getCurrentDirectoryPath()));
     	}
@@ -106,13 +114,7 @@ public class VueFileChooser extends JFileChooser{
     		}
     		else
     		{
-    			//+ls;140330;
-    			String s = VUE.getActiveMap().getSaveLocation();
-    			//System.out.println(s);
-    			if( s == null)
-    				chooser = new VueFileChooser();
-    			else
-    				chooser = new VueFileChooser(new File(VUE.getActiveMap().getSaveLocation()));
+    			chooser = createVueFileChooser();
     		}
 
     	}
