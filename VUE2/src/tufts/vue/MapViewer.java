@@ -28,6 +28,7 @@ import tufts.vue.gui.MapScrollPane;
 import tufts.vue.gui.TimedASComponent;
 import tufts.vue.gui.VuePopupFactory;
 import tufts.vue.gui.WindowDisplayAction;
+import tufts.vue.ls.LsDragDrop;
 import tufts.vue.ls.LsFunction;
 import static tufts.vue.MapDropTarget.*;
 import tufts.vue.NodeTool;
@@ -41,6 +42,7 @@ import java.util.TimerTask;
 import java.lang.Math;
 import java.awt.*;
 import java.awt.event.*;
+
 import static java.awt.event.KeyEvent.*;
 import java.awt.geom.*;
 
@@ -109,6 +111,8 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
     
     private static final int RolloverAutoZoomDelay = VueResources.getInt("mapViewer.rolloverAutoZoomDelay");
 
+    public LWComponent mhitcomponent= null;	//+ls@15021
+    
     private static final Timer ViewerTimer = new Timer("AllViewers");
     
     //static int RolloverAutoZoomDelay = 1;
@@ -978,10 +982,10 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
     // The core conversion routines: todo: rename "screen" to "canvas",
     // as "screen" no longer accurate if we're in a scroll-pane.
     //------------------------------------------------------------------
-    protected float screenToMapX(float x) {
+    public float screenToMapX(float x) {
         return (float) ((x + getOriginX()) * mZoomInverse);
     }
-    protected float screenToMapY(float y) {
+    public float screenToMapY(float y) {
         return (float) ((y + getOriginY()) * mZoomInverse);
     }
     float screenToMapX(double x) {
@@ -6047,7 +6051,7 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
         private int kk = 0;
         private static DockWindow DebugInspector;
         private static DockWindow DebugIntrospector;
-        private DockWindow debugPanner;
+        private DockWindow debugPanner;        
         
     public void keyPressed(KeyEvent e) {
 
@@ -6072,88 +6076,89 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
             boolean handled = true;
             
             //+ls;140318;
-            if(!LsFunction.mthis.onMapViewerKeyPressed(e))
+            handled = LsFunction.mthis.onMapViewerKeyPressed(e);
+            if(!handled)
             {
-	            switch (keyCode) {
-	            case KeyEvent.VK_DELETE:
-	            case KeyEvent.VK_BACK_SPACE:
-	                // todo: can't we add this to a keymap for the MapViewer JComponent?
-	                // (Why doesn't the entry for this in the Edit menu auto-provide this mapping?)
-	                if (!e.isConsumed() && Actions.Delete.enabled())
-	                    Actions.Delete.fire(e);
-	                else
-	                    handled = false;
-	                break;
-	
-	            case KeyEvent.VK_ENTER:
-	                if (!Actions.Rename.isUserEnabled() && // messy: encoding that we know Rename uses ENTER here...
-	                    !(mFocal instanceof LWMap) && !(this instanceof tufts.vue.ui.SlideViewer)) { // total SlideViewer hack...
-	                    handled = popFocal(e.isShiftDown(), ANIMATE);
-	                } else if (Actions.Rename.isUserEnabled()) {
-	                    // while this is normally fired via it's membership in the main menu, we have to fire it manually
-	                    // here just in case this happens to be a full-screen viewer (FocusManager normallhy relays
-	                    // possible action keys to the VueMenuBar manually, but VK_ENTER isn't a safe one to do this
-	                    // with) TODO: handle this kind of thing generically via direct access to action key bindings.
-	                    Actions.Rename.fire(e);
-	                } else
-	                    handled = false;
-	
-	                break;
-	                
-	            case KeyEvent.VK_ESCAPE: // general abort
-	
-	                if (dragComponent != null) {
-	                    double oldX = viewer.screenToMapX(dragStart.x) + dragOffset.x;
-	                    double oldY = viewer.screenToMapY(dragStart.y) + dragOffset.y;
-	                    dragComponent.setMapLocation(oldX, oldY);
-	                    //dragPosition.setLocation(oldX, oldY);
-	                    setDragger(null);
-	                    activeTool.handleDragAbort();
-	                    clearMouse();
-	                    clearIndicated(); // incase dragging new link
-	                    // TODO: dragControl not abortable...
-	                    repaint();
-	                } if (draggedSelectorBox != null) {
-	                    // cancel any drags
-	                    draggedSelectorBox = null;
-	                    isDraggingSelectorBox = false;
-	                    repaint();
-	                } else if (VUE.inFullScreen()) { // todo: can now more cleanly just handle this in FullScreen.FSWindow
-	                    
-	                    //VUE.toggleFullScreen(false, true);
-	                    Actions.ToggleFullScreen.fire(e);
-	
-	                    // THE BELOW NOW DOES NOTHING AS THE VIEWER INSTANCE IS DIFFERENT!
-	                    //if (mFocal != null)
-	                    //    loadFocal(mFocal.getMap()); // make sure top-level map is displayed
-	                    
-	                    if (activeTool instanceof PresentationTool) // todo: need to do this in a more centralized location...
-	                        activateTool(VueTool.getInstance(SelectionTool.class));
-	                } else
-	                    handled = false;
-	                break;
-	                
-	            case KeyEvent.VK_BACK_SLASH:
-	                // too easy to accidentally hit this instead of the return
-	                // key while in presentation mode, so only allow if
-	                // not already in full-screen mode.
-	                //if (anyModifierKeysDown(e) || !DEBUG.Enabled || VUE.inFullScreen()) {
-	                if (GUI.anyModifierKeysDown(e) || VUE.inFullScreen()) {
-	                    // do NOT fire this internal shortcut of '\' for fullscreen
-	                    // if the actual action (Command-\) was fired.
-	                    handled = false;
-	                } else
-	                    //VUE.toggleFullScreen(false, true);
-	                    Actions.ToggleFullScreen.fire(e);
-	                break;
-	                // fallthru:
-	//             case KeyEvent.VK_F11:
-	//                 if (!e.isConsumed())
-	//                     VUE.toggleFullScreen(false, true);
-	//                 break;
-	            default:
-	                handled = false;
-	            }
+            switch (keyCode) {
+            case KeyEvent.VK_DELETE:
+            case KeyEvent.VK_BACK_SPACE:
+                // todo: can't we add this to a keymap for the MapViewer JComponent?
+                // (Why doesn't the entry for this in the Edit menu auto-provide this mapping?)
+                if (!e.isConsumed() && Actions.Delete.enabled())
+                    Actions.Delete.fire(e);
+                else
+                    handled = false;
+                break;
+
+            case KeyEvent.VK_ENTER:
+                if (!Actions.Rename.isUserEnabled() && // messy: encoding that we know Rename uses ENTER here...
+                    !(mFocal instanceof LWMap) && !(this instanceof tufts.vue.ui.SlideViewer)) { // total SlideViewer hack...
+                    handled = popFocal(e.isShiftDown(), ANIMATE);
+                } else if (Actions.Rename.isUserEnabled()) {
+                    // while this is normally fired via it's membership in the main menu, we have to fire it manually
+                    // here just in case this happens to be a full-screen viewer (FocusManager normallhy relays
+                    // possible action keys to the VueMenuBar manually, but VK_ENTER isn't a safe one to do this
+                    // with) TODO: handle this kind of thing generically via direct access to action key bindings.
+                    Actions.Rename.fire(e);
+                } else
+                    handled = false;
+
+                break;
+                
+            case KeyEvent.VK_ESCAPE: // general abort
+
+                if (dragComponent != null) {
+                    double oldX = viewer.screenToMapX(dragStart.x) + dragOffset.x;
+                    double oldY = viewer.screenToMapY(dragStart.y) + dragOffset.y;
+                    dragComponent.setMapLocation(oldX, oldY);
+                    //dragPosition.setLocation(oldX, oldY);
+                    setDragger(null);
+                    activeTool.handleDragAbort();
+                    clearMouse();
+                    clearIndicated(); // incase dragging new link
+                    // TODO: dragControl not abortable...
+                    repaint();
+                } if (draggedSelectorBox != null) {
+                    // cancel any drags
+                    draggedSelectorBox = null;
+                    isDraggingSelectorBox = false;
+                    repaint();
+                } else if (VUE.inFullScreen()) { // todo: can now more cleanly just handle this in FullScreen.FSWindow
+                    
+                    //VUE.toggleFullScreen(false, true);
+                    Actions.ToggleFullScreen.fire(e);
+
+                    // THE BELOW NOW DOES NOTHING AS THE VIEWER INSTANCE IS DIFFERENT!
+                    //if (mFocal != null)
+                    //    loadFocal(mFocal.getMap()); // make sure top-level map is displayed
+                    
+                    if (activeTool instanceof PresentationTool) // todo: need to do this in a more centralized location...
+                        activateTool(VueTool.getInstance(SelectionTool.class));
+                } else
+                    handled = false;
+                break;
+                
+            case KeyEvent.VK_BACK_SLASH:
+                // too easy to accidentally hit this instead of the return
+                // key while in presentation mode, so only allow if
+                // not already in full-screen mode.
+                //if (anyModifierKeysDown(e) || !DEBUG.Enabled || VUE.inFullScreen()) {
+                if (GUI.anyModifierKeysDown(e) || VUE.inFullScreen()) {
+                    // do NOT fire this internal shortcut of '\' for fullscreen
+                    // if the actual action (Command-\) was fired.
+                    handled = false;
+                } else
+                    //VUE.toggleFullScreen(false, true);
+                    Actions.ToggleFullScreen.fire(e);
+                break;
+                // fallthru:
+//             case KeyEvent.VK_F11:
+//                 if (!e.isConsumed())
+//                     VUE.toggleFullScreen(false, true);
+//                 break;
+            default:
+                handled = false;
+            }
             }
             
             //if (DEBUG.KEYS) kdebug("keyPressed;handled=" + handled, e);
@@ -6444,8 +6449,9 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
     public void keyReleased(KeyEvent e) {
         if (DEBUG.KEYS) kdebug("keyReleased", e);
         
+        //+ls;140318; for node drag when node overlapped;
         LsFunction.mthis.onMapViewerKeyReleased(e);
-              
+        
         try {
             handleKeyReleased(e);
         } catch (Throwable t) {
@@ -6657,6 +6663,9 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
             final float mapY = screenToMapY(e.getY());
             final MapMouseEvent mme = new MapMouseEvent(e, mapX, mapY, null, gotFocus);
 
+            //+ls@150218;
+            LsDragDrop.mthis.onMapViewerMousePressed(this, mapX, mapY);
+            
             if (activeTool.handleMousePressed(mme)) {
                 activeToolAteMousePress = true;
                 return;
@@ -6708,6 +6717,9 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
             if (activeTool.supportsSelection()) {
                 //hitComponent = activeTool.pickNodeAt(getPickContext(mapX, mapY));
                 hitComponent = pickNode(mapX, mapY);
+                
+                // +ls@140729;
+                hitComponent = LsDragDrop.mthis.onMapViewerMousePressedHit(hitComponent, activeTool);
                 
                 if (hitComponent == null && activeTool instanceof ComboModeTool && VUE.getSelection() != null && VUE.getSelection().isEmpty())
                 {
@@ -7077,7 +7089,7 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
 
             if(LsFunction.mthis.onMapViewerMouseWheelMoved(e))
             {
-            	//e.consume();
+            	e.consume();
             	return;
             }
             
@@ -8106,7 +8118,9 @@ public class MapViewer extends TimedASComponent//javax.swing.JComponent
                     // we want to de-parent then reparent to itself, which creates
                     // an action
                     if (DEBUG.PARENTING)  out("DIRECTING", parent + " -> " + newParent);
-                    parent.reparentTo(newParent, moveList);
+                    // +ls@140727;                  
+                    parent.reparentTo( new Point2D.Float(screenToMapX(e.getX()), screenToMapY(e.getY()))
+                    	,newParent, moveList);
                     moved = true;
                 } else {
                     if (DEBUG.DND) out("processDrop", "no reparenting needed into " + newParent);

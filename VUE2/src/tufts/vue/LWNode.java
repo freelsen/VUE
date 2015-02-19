@@ -17,6 +17,7 @@ package tufts.vue;
 
 import tufts.Util;
 import static tufts.Util.fmt;
+import tufts.vue.ls.LsDragDrop;
 import tufts.vue.shape.RectangularPoly2D;
                        
 import edu.tufts.vue.preferences.PreferencesManager;
@@ -2125,34 +2126,8 @@ public class LWNode extends LWContainer
 
     protected void layoutChildrenSingleColumn(float baseX, float baseY, Size result)
     {
-        float y = baseY;
-        float maxWidth = 0;
-        boolean first = true;
-
-        for (LWComponent c : getChildren()) {
-            if (c instanceof LWLink) // todo: don't allow adding of links into a manged layout node!
-                continue;
-            if (c.isHidden())
-                continue;
-            if (first)
-                first = false;
-            else
-                y += ChildVerticalGap * getScale();
-            c.setLocation(baseX, y);
-            y += c.getLocalHeight();
-
-            if (result != null) {
-                // track max width
-                float w = c.getLocalBorderWidth();
-                if (w > maxWidth)
-                    maxWidth = w;
-            }
-        }
-
-        if (result != null) {
-            result.width = maxWidth;
-            result.height = (y - baseY);
-        }
+    	//+ls@150219;
+    	LsDragDrop.mthis.layoutChildrenSingleColumn(this, baseX, baseY, result);
     }
     
     class Column extends java.util.ArrayList<LWComponent>
@@ -2625,9 +2600,6 @@ public class LWNode extends LWContainer
             if (WrapText) {
                 return mLabelPos.x;
             } else {
-            	//+ls;140316;
-            	if( mAlignment.get() == Alignment.RIGHT )
-            		return ChildPadX;
             	
                 // todo problem: pre-existing default alignment w/out icons
                 // is center label, left children: when we move to generally
@@ -2669,10 +2641,6 @@ public class LWNode extends LWContainer
             // but only to a certian threshold -- what a hack!
             //float textHeight = getLabelBox().getPreferredSize().height;
             
-        	//+ls;140316;
-        	if( mAlignment.get() == Alignment.RIGHT )
-        		return EdgePadY;
-        	
             if (false && WrapText)
                 return mLabelPos.y;
             else {
@@ -2775,7 +2743,7 @@ public class LWNode extends LWContainer
     private static final int ChildOffsetY = 4; // how far children down from bottom of label divider line
     private static final int ChildPadY = ChildOffsetY;
     private static final int ChildPadX = 5; // min space at left/right of children
-    private static final int ChildVerticalGap = 3; // vertical space between children
+    public static final int ChildVerticalGap = 3; // vertical space between children
     private static final int ChildHorizontalGap = 3; // horizontal space between children
     private static final int ChildrenPadBottom = ChildPadX - ChildVerticalGap; // make same as space at right
     //    private static final int ChildrenPadBottom = 3; // space at bottom after all children

@@ -16,6 +16,7 @@
 package tufts.vue;
 
 import tufts.Util;
+import tufts.vue.ls.LsDragDrop;
 import static tufts.Util.copy;
 
 import java.util.*;
@@ -37,7 +38,7 @@ import java.awt.geom.Rectangle2D;
  */
 public abstract class LWContainer extends LWComponent
 {
-    protected static final org.apache.log4j.Logger Log = org.apache.log4j.Logger.getLogger(LWContainer.class);
+    public static final org.apache.log4j.Logger Log = org.apache.log4j.Logger.getLogger(LWContainer.class);
 
     private static final Object REMOVE_DEFAULT = "default";
     private static final Object REMOVE_DELETE = "delete";
@@ -184,13 +185,20 @@ public abstract class LWContainer extends LWComponent
      */
     public void reparentTo(final LWContainer newParent, Collection<LWComponent> possibleChildren)
     {
-        if (newParent == null) {
-            Log.warn(this + "; reparentTo: null new parent reparenting " + possibleChildren);
+    	reparentTo(null, newParent, possibleChildren);
+    }
+    public void reparentTo(final Point2D.Float ptmap,final LWContainer newParent, Collection<LWComponent> possibleChildren)    {
+    	if (newParent == null) {
+        	Log.warn(this + "; reparentTo: null new parent reparenting " + possibleChildren);
             return;
         }
         if (newParent == this) {
+        	
+        	//+ls@150219;
+        	LsDragDrop.mthis.onReparentTo(ptmap, this, possibleChildren);
+        	      	
             //Util.printStackTrace(this + "; attempting to reparent back to ourself: " + possibleChildren);
-            Log.warn(this + "; reparentTo: attempting to reparent back to ourself: " + possibleChildren);
+        	Log.warn(this + "; reparentTo: attempting to reparent back to ourself: " + possibleChildren);
             return;
         }
         
@@ -538,14 +546,18 @@ public abstract class LWContainer extends LWComponent
         // in an indeterminate state.
         //----------------------------------------------------------------------------------------
         
+        // +ls@140727;	
+        LsDragDrop.mthis.onSetAsChildAndLocalize(c, this, 
+        		new Point2D.Float(c.getMapX(), c.getMapY()));
+        
         if (oldParent != null && !isManagingChildLocations()) {
 
             // If we're managing child locations (e.g., and LWNode), no need
             // to localize, as the node will have it's position explicitly assigned
             // by the parent when it lays itself out
-        
-            // Save current mapX / mapY before setting the parent (which would change the reported mapX / mapY)
-            final float oldMapX = c.getMapX();
+			
+        	// Save current mapX / mapY before setting the parent (which would change the reported mapX / mapY)
+        	final float oldMapX = c.getMapX();
             final float oldMapY = c.getMapY();
             final double oldParentMapScale = c.getMapScale();
 
@@ -653,7 +665,7 @@ public abstract class LWContainer extends LWComponent
     /**
      * Remove any children in this iterator from this container.
      */
-    protected final void removeChildren(Iterable<LWComponent> iterable) {
+    public final void removeChildren(Iterable<LWComponent> iterable) {
         removeChildren(iterable, REMOVE_DEFAULT);
     }
     

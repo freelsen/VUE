@@ -528,7 +528,8 @@ public class ActionUtil
         if (targetFile.exists()) {
             File backup = null;
             try {
-                final String backupName = String.format(".~%s", targetFile.getName());
+            	final String backupName = String.format("%s.bak", targetFile.getName()); //+ls@150217;
+                //final String backupName = String.format(".~%s", targetFile.getName());
                 //if (DEBUG.IO) Log.debug(String.format("creating backup named [%s]", backupName));
                 backup = new File(targetFile.getParent(), backupName);
                 if (backup.delete())  // Required on Win32 or rename will fail
