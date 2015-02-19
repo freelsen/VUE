@@ -4,37 +4,54 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
+import java.io.File;
 
 import tufts.vue.DEBUG;
+import tufts.vue.LWComponent;
 import tufts.vue.MapMouseEvent;
+import tufts.vue.MapViewer;
 import tufts.vue.VUE;
 import tufts.vue.VueTool;
 import tufts.vue.VueToolbarController;
 import tufts.vue.ZoomTool;
+import tufts.vue.gui.VueFileChooser;
 
 public class LsFunction {
 
 	public static LsFunction mthis = null;
+	public LsDragDrop mlsdragdrop = new LsDragDrop();
+	
 	public LsFunction()
 	{
 		mthis = this;
 	}
 	
 	// -------- open dir = map dir; ------------------------
-	public String getActiveMapLocation()
+	//+ls@150217;
+	public VueFileChooser createVueFileChooser()
 	{
-		return VUE.getActiveMap().getSaveLocation();
+		VueFileChooser chooser = null;
+
+		// +ls;-140330;
+		String s = VUE.getActiveMap().getSaveLocation();;
+		if( s == null)
+			chooser = new VueFileChooser();
+		else
+			chooser = new VueFileChooser(new File(s));
+
+		return chooser;
 	}
-	
 	// ----------shortkey on mapviewer; --------------------
     //+ls;140318;
     private boolean mfunkey = false;
-	public boolean isFunctionKey(){ return mfunkey; }
+	public boolean isFunctionKey(){ 
+		//return mfunkey;
+		return true; //always enable. +ls@150218;
+	}
     private VueTool[] getToolbarTopLevelTools()
     {
     	return VueToolbarController.getController().getTopLevelTools();
     }
-
     private void onToolKey( int idx)
     {
     	//+ls;140318;
@@ -90,7 +107,7 @@ public class LsFunction {
         	mfunkey = false;
 	}
 	
-	// mousewheel zoom;
+	// ------------------mousewheel zoom;----------------------
 	//+ls;140321;
     public Point2D getMapXY( MouseWheelEvent e) { 
     	MapMouseEvent mapmouse = new MapMouseEvent(e);
@@ -99,22 +116,37 @@ public class LsFunction {
     public boolean onMapViewerMouseWheelMoved(MouseWheelEvent e)
     {
         if( (e.isControlDown()))
-        {        
+        {
+        	if (DEBUG.TOOL) System.out.println(this + " handleMouseReleased " + e);
+
+        	VueTool[] tools = getToolbarTopLevelTools();
+            ZoomTool zoomtool = (ZoomTool)tools[5];
+
+            if (zoomtool.ignoreRelease) {
+            	zoomtool.ignoreRelease = false;
+                return true;
+            }
+            
             boolean iswheelup = false;
             if( e.getWheelRotation() <0)
             	iswheelup = true;
             
-            Point2D p = getMapXY(e);
-            //if( e.getButton() == MouseEvent.BUTTON1)
-        	//VueTool[] tools = getToolbarTopLevelTools();
-            //ZoomTool zoomtool = (ZoomTool)tools[5];
-            if ( iswheelup )
-            	ZoomTool.setZoomSmaller(p);
-            else
-            	ZoomTool.setZoomBigger(p);
-            
-            e.consume(); 
-            
+            MapMouseEvent mme = new MapMouseEvent(e);
+            Point2D p = new Point2D.Float(mme.getMapX(), mme.getMapY());
+
+            if (e.isShiftDown() || e.getButton() != MouseEvent.BUTTON1) {
+                if ( iswheelup ||  zoomtool.disableToggleZoom)
+                	zoomtool.setZoomBigger(p);
+                else            	
+                	zoomtool.setZoomSmaller(p);
+            } 
+            else {
+	            if ( iswheelup )
+	            	zoomtool.setZoomSmaller(p);
+	            else
+	            	zoomtool.setZoomBigger(p);
+            }           
+            //e.consume();          
             return true;
         }
         else

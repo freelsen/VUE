@@ -23,6 +23,7 @@ import java.awt.Rectangle;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Dimension2D;
@@ -125,7 +126,7 @@ public class ZoomTool extends VueTool
     private LWComponent zoomedToFull;
     private LWComponent oldFocal;
     private LWSlide editingFocal; // for now, should only ever be an LWSlide
-    private boolean ignoreRelease = false;
+    public boolean ignoreRelease = false;
 
 //     /** Enabled rollover indication highlighting */
 //     @Override
@@ -170,7 +171,7 @@ public class ZoomTool extends VueTool
     
     
     // Classic simple version:
-    private boolean disableToggleZoom = false;
+    public boolean disableToggleZoom = false;
     @Override
     public boolean handleMousePressed(MapMouseEvent e) {
         super.handleMousePressed(e);

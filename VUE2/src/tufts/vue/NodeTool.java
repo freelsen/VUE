@@ -16,6 +16,7 @@
 
 package tufts.vue;
 
+import tufts.vue.ls.LsDragDrop;
 import tufts.vue.shape.*;
 
 import java.lang.*;
@@ -330,7 +331,11 @@ public class NodeTool extends VueTool
             node.setFrame(e.getMapSelectorBox());
             node.setLabel(VueResources.getString("newnode.html"));
             MapViewer viewer = e.getViewer();
-            viewer.getFocal().addChild(node);
+            
+            //+ls@150218;
+            if(!LsDragDrop.mthis.onNodeToolHandleSelectionRelease(viewer, node))
+            	viewer.getFocal().addChild(node);
+            
             VUE.getUndoManager().mark("New Node");
             VUE.getSelection().setTo(node);
             viewer.activateLabelEdit(node);

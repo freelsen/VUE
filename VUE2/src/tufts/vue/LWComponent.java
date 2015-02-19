@@ -41,6 +41,7 @@ import java.net.*;
 import javax.swing.text.StyleConstants;
 //import tufts.vue.beans.UserMapType; // remove: old SB stuff we never used
 import tufts.vue.filter.*;
+import tufts.vue.ls.LsComp;
 
 import edu.tufts.vue.metadata.MetadataList;
 import edu.tufts.vue.metadata.VueMetadataElement;
@@ -65,6 +66,8 @@ public class LWComponent
     implements VueConstants, XMLUnmarshalListener
 {
     protected static final org.apache.log4j.Logger Log = org.apache.log4j.Logger.getLogger(LWComponent.class);
+
+    public LsComp mlscomp = new LsComp();//+ls@150218;
 
     public enum ChildKind {
 
@@ -266,7 +269,7 @@ public class LWComponent
     /*
      * Meta-data persistant information
      */
-    protected String label = null; // protected for debugging purposes
+    public String label = null; // protected for debugging purposes
     private String notes = null;
     private Resource resource = null;
     private String mLabelFormat; // if there's a data-format, it's stored here
@@ -7028,7 +7031,7 @@ public class LWComponent
             notify(key, oldValue ? Boolean.TRUE : Boolean.FALSE);
     }
 
-    protected void notify(String what)
+    public void notify(String what)
     {
         // todo: we still need both src & component? (this,this)
         notifyLWCListeners(new LWCEvent(this, this, what, LWCEvent.NO_OLD_VALUE));

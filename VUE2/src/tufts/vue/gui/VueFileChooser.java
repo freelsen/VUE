@@ -66,20 +66,6 @@ public class VueFileChooser extends JFileChooser{
 		
 	}
 	
-	//+ls@150217;
-	private static VueFileChooser createVueFileChooser()
-	{
-		VueFileChooser chooser = null;
-
-		// +ls;-140330;
-		String s = LsFunction.mthis.getActiveMapLocation();
-		if( s == null)
-			chooser = new VueFileChooser();
-		else
-			chooser = new VueFileChooser(new File(s));
-
-		return chooser;
-	}
 	public static VueFileChooser getVueFileChooser()
 	{
 		VueFileChooser chooser = null;
@@ -91,7 +77,7 @@ public class VueFileChooser extends JFileChooser{
     	 // up with a test case to see if this will really go.
     	 // MK
 		// try{
-			chooser = createVueFileChooser();
+			chooser = LsFunction.mthis.createVueFileChooser();
 		 // } catch(Throwable t)
 		 // {
 		 //	  chooser.setUI(new javax.swing.plaf.metal.MetalFileChooserUI(chooser));
@@ -114,7 +100,7 @@ public class VueFileChooser extends JFileChooser{
     		}
     		else
     		{
-    			chooser = createVueFileChooser();
+    			chooser = LsFunction.mthis.createVueFileChooser();
     		}
 
     	}
