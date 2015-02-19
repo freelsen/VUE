@@ -942,7 +942,7 @@ public class PresentationTool extends VueTool
         @Override protected void notify(String what, LWComponent contents) {}
         @Override protected void notify(String what, Object oldValue) {}
         @Override protected void notify(Key key, Object oldValue) {}
-        @Override protected void notify(String what) {}
+        @Override public void notify(String what) {}
         @Override protected void notify(String what, List<LWComponent> componentList) {}
         @Override protected void notifyLWCListeners(LWCEvent e) {} 
         
